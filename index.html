@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='es-AR'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover'>
+<meta name='theme-color' content='#1769AA'>
+<meta name='description' content='Prototipo de demostracion del portal de autogestion ciudadana de la Municipalidad de Las Toscas, Santa Fe. Datos ficticios.'>
+<title>Las Toscas · Portal ciudadano (demo)</title>
+<link rel='icon' type='image/svg+xml' href='assets/escudo-placeholder.svg'>
+<link rel='stylesheet' href='css/styles.css'>
+</head>
+<body>
+<a class='salto' href='#vista'>Saltar al contenido principal</a>
+<div class='app'>
+<aside class='sidebar' id='sidebar'>
+<div class='sidebar-marca'>
+<img src='assets/escudo-placeholder.svg' alt='Espacio reservado para el escudo municipal' class='escudo'>
+<div><span class='marca-nombre'>Las Toscas</span><span class='marca-sub'>Municipalidad · Santa Fe</span></div>
+</div>
+<nav id='nav-lateral' class='nav-lateral' aria-label='Secciones'></nav>
+<div class='sidebar-pie'><p class='demo-nota'>Prototipo de demostración.<br>Datos ficticios, sin validez oficial.</p></div>
+</aside>
+<div class='col-principal'>
+<header class='cabecera' id='cabecera'>
+<div class='cabecera-marca'>
+<img src='assets/escudo-placeholder.svg' alt='' class='escudo'>
+<div class='cabecera-titulo'><strong>Las Toscas</strong><span>Portal ciudadano · demo</span></div>
+</div>
+<div class='cabecera-acciones'>
+<a href='#/ayuda' class='btn-icono' id='btn-ayuda' aria-label='Ayuda y contacto' title='Ayuda y contacto'></a>
+<a href='#/notificaciones' class='btn-icono' id='campana' aria-label='Notificaciones' title='Notificaciones'><span class='contador' id='contador-notif' hidden></span></a>
+<a href='#/perfil' class='avatar' id='avatar' aria-label='Mi perfil'>MA</a>
+</div>
+</header>
+<main id='vista' class='vista' tabindex='-1'></main>
+<footer class='pie'><p><strong>Prototipo de demostración</strong> — sin conexión con sistemas municipales reales. Importes, trámites, turnos y comprobantes son ficticios y no tienen validez oficial.</p></footer>
+</div>
+</div>
+<nav class='nav-inferior' id='nav-inferior' aria-label='Navegación principal'></nav>
+<div id='modal-raiz'></div>
+<div id='toast-raiz' aria-live='polite'></div>
+<noscript><div class='noscript'>Esta demo necesita JavaScript habilitado para funcionar.</div></noscript>
+<script src='js/icons.js'></script>
+<script src='js/utils.js'></script>
+<script src='js/data.js'></script>
+<script src='js/storage.js'></script>
+<script src='js/services.js'></script>
+<script src='js/ui.js'></script>
+<script src='js/views/home.js'></script>
+<script src='js/views/pagos.js'></script>
+<script src='js/views/vehiculos.js'></script>
+<script src='js/views/reclamos.js'></script>
+<script src='js/views/tramites.js'></script>
+<script src='js/views/turnos.js'></script>
+<script src='js/views/perfil.js'></script>
+<script src='js/views/notificaciones.js'></script>
+<script src='js/views/ayuda.js'></script>
+<script src='js/app.js'></script>
+</body>
+</html>
