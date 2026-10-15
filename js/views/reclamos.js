@@ -364,5 +364,5 @@ Views.reclamos = (function () {
     };
   }
 
-  return { main: main, nuevo: nuevo, detalle: detalle };
+  return { main: main, nuevo: nuevo, detalle: detalle, badgeReclamo: badgeReclamo, timelineHtml: timelineHtml };
 })();

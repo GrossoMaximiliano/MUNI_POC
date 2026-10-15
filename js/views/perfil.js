@@ -7,7 +7,9 @@ Views.perfil = (function () {
 
   function main() {
     var st = Store.state;
+    if (st.sesion && st.sesion.rol === 'admin') return adminMain();
     var u = st.usuario;
+    var s = st.sesion;
     var pagos = st.pagos.slice(0, 3);
     var reclamos = st.reclamos.slice(0, 3);
     var tramites = st.tramites.slice(0, 3);
@@ -25,6 +27,7 @@ Views.perfil = (function () {
       <section class='seccion'>
         <div class='seccion-cabeza'><h2>Mis datos</h2></div>
         <div class='card'>
+          ${filaDato('Cuenta de acceso (demo)', s.email)}
           ${filaDato('Correo electrónico (ejemplo)', u.email)}
           ${filaDato('Teléfono (ejemplo)', u.telefono)}
           ${filaDato('Domicilio declarado (ejemplo)', u.domicilio)}
@@ -82,11 +85,11 @@ Views.perfil = (function () {
       </section>
 
       <section class='seccion'>
-        <div class='seccion-cabeza'><h2>Sesión (simulada)</h2></div>
+        <div class='seccion-cabeza'><h2>Sesión (demo)</h2><span class='badge b-info'>${Icons.r('user')}Ciudadano</span></div>
         <div class='card'>
-          <p class='sub'>Este prototipo no implementa autenticación real y nunca solicita contraseñas ni datos bancarios.</p>
+          <p class='sub'>La autenticación es simulada: las claves se guardan sin cifrar en este navegador. No uses claves reales.</p>
           <div class='fila-acciones'>
-            <a class='btn btn-secundario btn-bloque' href='#/login'>${Icons.r('log-out', 'i-18')} Cerrar sesión (demo)</a>
+            <button type='button' class='btn btn-secundario btn-bloque' id='pf-salir'>${Icons.r('log-out', 'i-18')} Cerrar sesión</button>
           </div>
         </div>
       </section>
@@ -102,6 +105,13 @@ Views.perfil = (function () {
   }
 
   function enlazar(raiz) {
+    var salir = raiz.querySelector('#pf-salir');
+    if (salir) salir.addEventListener('click', function () {
+      Servicios.cerrarSesion();
+      App.refrescarSesion();
+      UI.toast('Sesión cerrada (demo).', 'info');
+      Router.go('login');
+    });
     raiz.querySelectorAll('[data-pref]').forEach(function (sw) {
       sw.addEventListener('change', function () {
         Servicios.actualizarPreferencia(sw.getAttribute('data-pref'), sw.checked);
@@ -130,6 +140,7 @@ Views.perfil = (function () {
       }).then(function (ok) {
         if (!ok) return;
         Store.reset();
+        App.refrescarSesion();
         UI.toast('Datos de demostración reiniciados.', 'exito');
         Router.go('inicio');
       });
@@ -264,71 +275,48 @@ Views.perfil = (function () {
     };
   }
 
-  function login() {
-    var u = Store.state.usuario;
+  function adminMain() {
+    var st = Store.state;
+    var s = st.sesion;
+    var cta = st.cuentas.filter(function (c) { return c.id === s.cuentaId; })[0] || { perfil: {} };
     var html = `
-      <div class='centrado-pane' style='padding-top:30px'>
-        <img src='assets/escudo-placeholder.svg' alt='Espacio reservado para el escudo municipal' style='width:64px;height:64px'>
-        <h1 style='margin-top:10px'>Las Toscas</h1>
-        <p class='sub centrado'>Portal ciudadano · prototipo de demostración</p>
+      <div class='card' style='display:flex;align-items:center;gap:14px'>
+        <span class='avatar avatar-lg'>${U.escape(U.iniciales(s.nombre, s.apellido))}</span>
+        <div style='flex:1'>
+          <h2 style='margin:0'>${U.escape(s.nombre + ' ' + s.apellido)}</h2>
+          <p class='sub' style='margin:2px 0 0'>Personal municipal de demostración</p>
+        </div>
+        <span class='badge b-neutra'>${Icons.r('shield-check')}Personal municipal</span>
       </div>
-      <div class='card'>
-        <h2>Ingresar (simulado)</h2>
-        <p class='sub'>Este prototipo no implementa autenticación real: no ingreses contraseñas ni datos sensibles.</p>
-        <div class='campo'>
-          <label for='lg-email'>Correo (precargado para la demo)</label>
-          <input id='lg-email' class='control' type='email' value='${U.escape(u.email)}' readonly>
+
+      <section class='seccion'>
+        <div class='seccion-cabeza'><h2>Datos de la cuenta (demo)</h2></div>
+        <div class='card'>
+          ${filaDato('Correo de acceso', s.email)}
+          ${filaDato('Área (demo)', cta.perfil.area || '-')}
+          ${filaDato('Rol', 'Personal municipal (demo)')}
         </div>
-        <div class='fila-acciones'>
-          <button type='button' class='btn btn-primario btn-bloque' id='lg-entrar'>${Icons.r('user', 'i-18')} Ingresar a la demo</button>
-          <button type='button' class='btn btn-secundario btn-bloque' id='lg-crear'>${Icons.r('plus', 'i-18')} Crear cuenta demo</button>
+      </section>
+
+      <section class='seccion'>
+        <div class='seccion-cabeza'><h2>Sesión (demo)</h2></div>
+        <div class='card'>
+          <p class='sub'>La autenticación es simulada: las claves se guardan sin cifrar en este navegador. No uses claves reales.</p>
+          <div class='fila-acciones'>
+            <button type='button' class='btn btn-secundario btn-bloque' id='pf-salir'>${Icons.r('log-out', 'i-18')} Cerrar sesión</button>
+          </div>
         </div>
-        <div class='alerta a-aviso mt-8'>${Icons.r('alert-triangle')}<span>${U.escape(DEMO.catalogos.emergenciaNota)}</span></div>
-      </div>`;
-    return {
-      titulo: 'Ingresar',
-      html: html,
-      after: function (raiz) {
-        var entrar = raiz.querySelector('#lg-entrar');
-        var crear = raiz.querySelector('#lg-crear');
-        if (entrar) entrar.addEventListener('click', function () {
-          Servicios.iniciarSesion();
-          UI.toast('¡Hola, ' + Store.state.usuario.alias + '! Sesión demo iniciada.', 'exito');
-          Router.go('inicio');
-        });
-        if (crear) crear.addEventListener('click', function () {
-          UI.modal({
-            titulo: 'Crear cuenta demo',
-            html: `
-              <div class='campo'><label for='cr-nombre'>Nombre</label><input id='cr-nombre' class='control' maxlength='40' placeholder='Tu nombre (demo)'></div>
-              <div class='campo'><label for='cr-email'>Correo (demo)</label><input id='cr-email' class='control' maxlength='80' placeholder='tucorreo@ejemplo.com'></div>
-              <div class='alerta a-info'>${Icons.r('info')}<span>Cuenta ficticia local: no se registra en ningún servidor.</span></div>`,
-            acciones: [
-              { texto: 'Cancelar', clase: 'btn-secundario' },
-              {
-                texto: 'Crear e ingresar', clase: 'btn-primario', mantener: true,
-                onClick: function (cerrar) {
-                  var n = document.getElementById('cr-nombre');
-                  var e = document.getElementById('cr-email');
-                  UI.limpiarErrores(document.getElementById('modal-raiz'));
-                  var ok = true;
-                  if (!n.value.trim()) { UI.ponerError(n, 'Ingresá un nombre.'); ok = false; }
-                  if (!U.esEmail(e.value)) { UI.ponerError(e, 'Correo no válido.'); ok = false; }
-                  if (!ok) return;
-                  Servicios.actualizarUsuario({ nombre: n.value.trim(), alias: n.value.trim().split(' ')[0], email: e.value.trim() });
-                  Servicios.iniciarSesion();
-                  App.pintarAvatar();
-                  cerrar();
-                  UI.toast('Cuenta demo creada. ¡Bienvenido/a!', 'exito');
-                  Router.go('inicio');
-                }
-              }
-            ]
-          });
-        });
-      }
-    };
+      </section>
+
+      <section class='seccion'>
+        <div class='card' style='border-style:dashed'>
+          <h3>Zona de demostración</h3>
+          <p class='sub'>Reiniciá los datos ficticios para volver a probar todos los flujos desde cero. Se borran los cambios locales (pagos, reclamos, trámites y turnos creados) y las cuentas registradas en este navegador.</p>
+          <button type='button' class='btn btn-peligro btn-bloque' id='pf-reset'>${Icons.r('refresh', 'i-18')} Reiniciar datos de demostración</button>
+        </div>
+      </section>`;
+    return { titulo: 'Mi perfil', html: html, after: function (raiz) { enlazar(raiz); } };
   }
 
-  return { main: main, editar: editar, login: login };
+  return { main: main, editar: editar, adminMain: adminMain };
 })();

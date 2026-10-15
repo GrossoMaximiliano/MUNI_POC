@@ -460,3 +460,12 @@ body{
 .fecha-chip:hover,.horario:not(:disabled):hover{border-color:var(--c-primario);transform:translateY(-1px)}
 .fecha-chip:active,.horario:active{transform:scale(.97)}
 .avisos-fila,.fechas,.chips{scrollbar-width:thin;scrollbar-color:var(--c-borde-fuerte) transparent}
+
+/* Panel de administración: KPIs */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kpi{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:13px 14px;background:var(--c-superficie);border:1px solid var(--c-borde);border-radius:16px;box-shadow:var(--sombra-1);transition:transform .12s ease,box-shadow .16s ease}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--sombra-2)}
+.kpi .tinte{width:38px;height:38px;flex:0 0 38px;border-radius:12px}
+.kpi-num{font-size:24px;font-weight:800;color:var(--c-primario-osc);line-height:1.05}
+.kpi-eti{font-size:12.5px;font-weight:600;color:var(--c-texto-2);line-height:1.3}
+@media(min-width:640px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
