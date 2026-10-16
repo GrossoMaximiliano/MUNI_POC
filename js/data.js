@@ -45,6 +45,9 @@ window.DEMO = (function () {
       turnos: [
         { id: 'tur-1', numero: 'TUR-2026-000031', tipo: 'Consultas de tasas y pagos', dependencia: 'Oficina de Rentas (demo)', direccion: 'Av. San Martín 000 (demo)', fecha: D(3, 9, 30), estado: 'Confirmado' }
       ],
+      reportesAgua: [
+        { id: 'agu-1', numero: 'AGU-2026-000017', nivel: 'critico', direccion: 'Los Cedros 45', barrio: 'Barrio San Martín', personas: 4, asistencia: true, telefono: '3482 555-1234', notas: 'El agua entra por la calle y ya cubre 20 cm dentro de la casa.', fecha: D(-1, 22, 30), estado: 'En asistencia', timeline: [ { estado: 'Recibido', fecha: D(-1, 22, 31), comentario: 'Reporte crítico recibido. Prioridad alta (demo).' }, { estado: 'Verificado', fecha: D(-1, 23, 10), comentario: 'Defensa Civil verificó la situación en el domicilio (demo).' }, { estado: 'En asistencia', fecha: D(0, 0, 45), comentario: 'Brigada asignada con bomba de achique. Asistencia en camino (demo).' } ] }
+      ],
       pagos: [
         { id: 'pag-1', comprobante: 'PAGO-2026-001132', fecha: D(-12, 14, 22), obligacionId: 'ob-8', concepto: 'Tasa General de Inmuebles · 2025 · 4ª cuota', identificador: 'Partida 123-45.890', importe: 21300, medio: 'Tarjeta de crédito o débito', estado: 'aprobado' },
         { id: 'pag-2', comprobante: 'PAGO-2026-001098', fecha: D(-45, 11, 5), obligacionId: null, concepto: 'Tasa de inspección sanitaria · 2026 · 2º trimestre', identificador: 'Cuenta comercial 5521 · Kiosco Mitre', importe: 7900, medio: 'Transferencia', estado: 'aprobado' }
@@ -221,6 +224,16 @@ window.DEMO = (function () {
       ]
     },
     turnosHorarios: ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30'],
+    nivelesAgua: [
+      { id: 'leve', nombre: 'Ingreso leve', texto: 'Entra un poco de agua: humedad, charcos o escurrimiento que puedo controlar.', icono: 'droplets', clase: 'b-aviso' },
+      { id: 'critico', nombre: 'Ingreso crítico', texto: 'Entra mucha agua o sube rápido. Hay riesgo para personas o bienes.', icono: 'alert-triangle', clase: 'b-peligro' }
+    ],
+    estadosAgua: ['Recibido', 'Verificado', 'En asistencia', 'Cerrado'],
+    comentariosAgua: {
+      'Verificado': 'Personal de Defensa Civil verificó la situación en el domicilio (demo).',
+      'En asistencia': 'Brigada asignada con bomba de achique. Asistencia en camino (demo).',
+      'Cerrado': 'La situación fue atendida y el reporte se cerró (demo).'
+    },
     avisos: [
       { id: 'avi-1', categoria: 'Servicios', titulo: 'Cambio temporal en horarios de recolección (demo)', texto: 'Contenido de demostración: la recolección de residuos podría realizarse con horarios modificados durante la semana.', fecha: D(-2, 9, 0) },
       { id: 'avi-2', categoria: 'Salud', titulo: 'Campaña de vacunación antirrábica (demo)', texto: 'Contenido de demostración: jornada de vacunación gratuita para mascotas en la plaza central.', fecha: D(-5, 10, 0) },

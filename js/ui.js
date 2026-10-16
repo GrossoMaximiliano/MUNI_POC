@@ -163,6 +163,28 @@ window.UI = (function () {
     return `<span class='etiqueta-demo' title='Contenido de demostración'>${Icons.r('info', 'i-14')} Demo</span>`;
   }
 
+  function procesarImagen(archivo, maxLado, cb) {
+    if (!archivo) { cb('No se seleccionó ningún archivo.'); return; }
+    if (!/^image\//.test(archivo.type)) { cb('El archivo debe ser una imagen.'); return; }
+    if (archivo.size > 3 * 1024 * 1024) { cb('La imagen supera los 3 MB permitidos.'); return; }
+    var lector = new FileReader();
+    lector.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var escala = Math.min(1, maxLado / Math.max(img.width, img.height));
+        var lienzo = document.createElement('canvas');
+        lienzo.width = Math.round(img.width * escala);
+        lienzo.height = Math.round(img.height * escala);
+        lienzo.getContext('2d').drawImage(img, 0, 0, lienzo.width, lienzo.height);
+        try { cb(null, lienzo.toDataURL('image/jpeg', 0.72)); } catch (e) { cb('No se pudo procesar la imagen.'); }
+      };
+      img.onerror = function () { cb('La imagen no se pudo leer.'); };
+      img.src = lector.result;
+    };
+    lector.onerror = function () { cb('No se pudo leer el archivo.'); };
+    lector.readAsDataURL(archivo);
+  }
+
   return {
     toast: toast,
     modal: modal,
@@ -174,6 +196,7 @@ window.UI = (function () {
     ponerError: ponerError,
     limpiarErrores: limpiarErrores,
     cargando: cargando,
-    etiquetaDemo: etiquetaDemo
+    etiquetaDemo: etiquetaDemo,
+    procesarImagen: procesarImagen
   };
 })();

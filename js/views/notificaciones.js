@@ -8,13 +8,14 @@ Views.notificaciones = (function () {
     vencimiento: 'Vencimientos',
     pago: 'Pagos',
     reclamo: 'Reclamos',
+    agua: 'Alertas por lluvias',
     tramite: 'Trámites',
     turno: 'Turnos',
     comunicado: 'Comunicados'
   };
 
   function iconoTipo(tipo) {
-    var mapa = { vencimiento: 'clock', pago: 'dollar', reclamo: 'megaphone', tramite: 'clipboard', turno: 'calendar-check', comunicado: 'megaphone', multa: 'alert-triangle' };
+    var mapa = { vencimiento: 'clock', pago: 'dollar', reclamo: 'megaphone', tramite: 'clipboard', turno: 'calendar-check', comunicado: 'megaphone', multa: 'alert-triangle', agua: 'droplets' };
     return mapa[tipo] || 'bell';
   }
 

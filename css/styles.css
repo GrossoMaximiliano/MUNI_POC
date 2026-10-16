@@ -482,3 +482,24 @@ body.sin-sesion #toast-raiz{bottom:24px}
 
 /* Escudo institucional en la pantalla de ingreso */
 .escudo-login{width:116px;height:116px;flex:0 0 116px}
+
+/* Acceso destacado: reporte por lluvias (El Niño) */
+.acceso-emergencia{
+  grid-column:1 / -1;
+  flex-direction:row;justify-content:flex-start;text-align:left;
+  gap:12px;padding:13px 14px;border:1.5px solid var(--c-peligro-borde);
+  background:linear-gradient(180deg,#FDECEA,#FFF6F5);
+}
+.acceso-emergencia:hover{color:var(--c-peligro);box-shadow:0 8px 22px rgba(179,38,30,.18)}
+.acceso-emergencia .tinte{width:48px;height:48px;flex:0 0 48px}
+.acceso-emergencia .item-sub span{color:var(--c-texto-2)}
+
+/* Opciones de nivel (leve / crítico) */
+.opcion-nivel{padding:15px;border-radius:16px;align-items:flex-start}
+.opcion-nivel .tinte{width:52px;height:52px;flex:0 0 52px;border-radius:16px}
+.opcion-nivel .opcion-titulo{font-size:15.5px}
+.opcion-nivel .opcion-sub{display:block;margin-top:2px;line-height:1.4}
+.opcion-nivel.esta-leve:has(input:checked){border-color:var(--c-aviso);background:var(--c-aviso-suave);box-shadow:0 0 0 1px var(--c-aviso)}
+.opcion-nivel.esta-leve:has(input:checked) .marca{background:var(--c-aviso);border-color:var(--c-aviso)}
+.opcion-nivel.esta-critico:has(input:checked){border-color:var(--c-peligro);background:var(--c-peligro-suave);box-shadow:0 0 0 1px var(--c-peligro)}
+.opcion-nivel.esta-critico:has(input:checked) .marca{background:var(--c-peligro);border-color:var(--c-peligro)}

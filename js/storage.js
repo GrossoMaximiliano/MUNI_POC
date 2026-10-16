@@ -29,6 +29,7 @@ window.Store = (function () {
     }
     if (!state) seed();
     if (!state.sesion) state.sesion = { iniciada: false, rol: null, cuentaId: null, nombre: '', apellido: '', alias: '', email: '' };
+    if (!state.reportesAgua) state.reportesAgua = [];
     save();
     return state;
   }

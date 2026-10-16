@@ -24,6 +24,7 @@ Views.reclamos = (function () {
       </div>
       <div class='fila-acciones horizontal' style='margin-top:0'>
         <a class='btn btn-primario' href='#/reclamos/nuevo'>${Icons.r('plus', 'i-18')} Nuevo reclamo</a>
+        <a class='btn btn-secundario' href='#/agua/nuevo'>${Icons.r('droplets', 'i-18')} Reportar agua por lluvias</a>
       </div>
       <section class='seccion'>
         <div class='seccion-cabeza'><h2>Mis reclamos (demo)</h2>${UI.etiquetaDemo()}</div>

@@ -31,7 +31,7 @@
     if (esAdmin()) {
       clave = segs[0] === 'perfil' ? 'perfil' : (segs[1] || 'admin');
     } else {
-      var mapa = { inicio: 'inicio', pagos: 'pagos', vehiculos: 'pagos', reclamos: 'reclamos', tramites: 'tramites', 'mis-tramites': 'tramites', turnos: 'tramites', perfil: 'perfil' };
+      var mapa = { inicio: 'inicio', pagos: 'pagos', vehiculos: 'pagos', reclamos: 'reclamos', agua: 'inicio', tramites: 'tramites', 'mis-tramites': 'tramites', turnos: 'tramites', perfil: 'perfil' };
       clave = mapa[segs[0]] || '';
     }
     document.querySelectorAll('[data-seccion]').forEach(function (a) {
@@ -210,6 +210,9 @@
     add('reclamos', function () { return Views.reclamos.main(); });
     add('reclamos/nuevo', function () { return Views.reclamos.nuevo(); });
     add('reclamos/detalle/:id', function (p) { return Views.reclamos.detalle(p.id); });
+    add('agua', function () { return Views.agua.main(); });
+    add('agua/nuevo', function () { return Views.agua.nuevo(); });
+    add('agua/detalle/:id', function (p) { return Views.agua.detalle(p.id); });
     add('tramites', function () { return Views.tramites.main(); });
     add('tramites/detalle/:id', function (p) { return Views.tramites.detalle(p.id); });
     add('tramites/solicitar/:id', function (p) { return Views.tramites.solicitar(p.id); });
