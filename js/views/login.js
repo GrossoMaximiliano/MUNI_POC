@@ -4,7 +4,7 @@ Views.login = (function () {
   function cabeceraPantalla(sub) {
     return `
       <div class='centrado-pane' style='padding-top:30px'>
-        <img src='assets/escudo-placeholder.svg' alt='Espacio reservado para el escudo municipal' style='width:64px;height:64px'>
+        <img src='assets/logo-municipalidad.png' alt='Escudo de la Municipalidad de Las Toscas' style='width:72px;height:72px'>
         <h1 style='margin-top:10px'>Las Toscas</h1>
         <p class='sub centrado'>${U.escape(sub)}</p>
       </div>`;

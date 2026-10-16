@@ -48,11 +48,11 @@
     var contador = document.getElementById('contador-notif');
     var btnAyuda = document.getElementById('btn-ayuda');
     if (btnAyuda) {
-      if (!btnAyuda.innerHTML) btnAyuda.innerHTML = Icons.r('help-circle');
+      if (!btnAyuda.querySelector('svg')) btnAyuda.innerHTML = Icons.r('help-circle');
       btnAyuda.hidden = admin;
     }
     if (!campana || !contador) return;
-    if (!campana.innerHTML) campana.innerHTML = Icons.r('bell');
+    if (!campana.querySelector('svg')) campana.insertAdjacentHTML('afterbegin', Icons.r('bell'));
     campana.hidden = admin;
     if (admin) { contador.hidden = true; return; }
     var n = Servicios.sinLeer();

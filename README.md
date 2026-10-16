@@ -56,7 +56,7 @@ js/views/admin/multas.js        Multas del municipio: búsqueda, filtros y detal
 js/views/admin/reclamos.js      Gestión de reclamos con avance de estado
 js/views/admin/tramites.js      Gestión de trámites con avance de estado
 js/views/admin/ciudadanos.js    Padrón de ciudadanos, deuda y bloqueo (simulado)
-assets/escudo-placeholder.svg   Espacio reservado para el escudo oficial
+assets/logo-municipalidad.png  Escudo oficial de la Municipalidad de Las Toscas
 ```
 
 ## Cuentas de demostración
@@ -86,7 +86,7 @@ La pantalla de ingreso incluye botones de acceso rápido con ambas cuentas. Tamb
 
 ## Personalización
 
-- **Paleta y marca**: los colores están como variables CSS al inicio de `css/styles.css` (`--c-primario`, `--c-primario-osc`, etc.). Al disponer de la identidad gráfica oficial alcanza con reemplazar esos valores y el archivo `assets/escudo-placeholder.svg`.
+- **Paleta y marca**: los colores están como variables CSS al inicio de `css/styles.css` (`--c-primario`, `--c-primario-osc`, etc.). El escudo institucional es `assets/logo-municipalidad.png` (favicon, sidebar, cabecera y pantalla de ingreso); para actualizarlo basta reemplazar ese archivo manteniendo el nombre.
 - **Datos**: los datos ficticios se generan en `js/data.js`. Las fechas se calculan relativas al día actual para que la demo luzca siempre activa.
 - **Futuras integraciones**: toda la persistencia pasa por `js/storage.js` y las operaciones por `js/services.js`; esos dos archivos son la frontera natural para conectar un backend real (API tributaria, pasarela de pagos, sistema de expedientes) sin reescribir las pantallas. El mapeo tentativo de servicios a endpoints REST está comentado en `js/services.js` (ej.: `login` → `POST /auth/login`, `resumenMunicipal` → `GET /admin/resumen`, `avanzarReclamoMunicipal` → `PATCH /admin/reclamos/:id`). El dataset del panel admin (`state.municipal`) es independiente del portal ciudadano para poder reemplazarlo por datos reales sin tocar las vistas del vecino.
 
