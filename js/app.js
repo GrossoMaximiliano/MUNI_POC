@@ -62,6 +62,7 @@
       campana.setAttribute('aria-label', 'Notificaciones: ' + n + ' sin leer');
     } else {
       contador.hidden = true;
+      contador.textContent = '';
       campana.setAttribute('aria-label', 'Notificaciones');
     }
   }
@@ -81,7 +82,12 @@
     if (sub) sub.textContent = esAdmin() ? 'Panel de gestión · demo' : 'Portal ciudadano · demo';
   }
 
+  function actualizarShell() {
+    document.body.classList.toggle('sin-sesion', !Store.state.sesion.iniciada);
+  }
+
   function refrescarSesion() {
+    actualizarShell();
     construirNavegacion();
     actualizarCabecera();
     pintarAvatar();

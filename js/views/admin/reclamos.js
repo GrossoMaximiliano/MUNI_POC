@@ -26,8 +26,8 @@ Views.adminReclamos = (function () {
         <span class='item-cuerpo'>
           <span class='item-titulo'>${U.escape(r.titulo)}</span>
           <span class='item-sub'><span>${r.numero}</span><span>${U.escape(r.barrio)}</span><span>${U.escape(Servicios.nombreCiudadano(r.ciudadanoId))}</span></span>
+          <span class='item-sub' style='margin-top:6px'>${badge(r.estado)}</span>
         </span>
-        <span class='item-derecha'>${badge(r.estado)}</span>
         <span class='flecha'>${Icons.r('chevron-right')}</span>
       </a>`;
   }
