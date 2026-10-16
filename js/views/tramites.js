@@ -293,5 +293,5 @@ Views.tramites = (function () {
     };
   }
 
-  return { main: main, detalle: detalle, solicitar: solicitar, misTramites: misTramites, misTramiteDetalle: misTramiteDetalle };
+  return { main: main, detalle: detalle, solicitar: solicitar, misTramites: misTramites, misTramiteDetalle: misTramiteDetalle, badgeTramite: badgeTramite };
 })();

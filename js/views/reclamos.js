@@ -35,8 +35,8 @@ Views.reclamos = (function () {
             <span class='item-cuerpo'>
               <span class='item-titulo'>${U.escape(r.titulo)}</span>
               <span class='item-sub'><span>${r.numero}</span><span>${U.fecha(r.fecha)}</span><span>${cat.nombre}</span></span>
+              <span class='item-sub' style='margin-top:6px'>${badgeReclamo(r.estado)}</span>
             </span>
-            <span class='item-derecha'>${badgeReclamo(r.estado)}</span>
             <span class='flecha'>${Icons.r('chevron-right')}</span>
           </a>`;
         }).join('')}</div>` : UI.vacio({ icono: 'megaphone', titulo: 'No enviaste reclamos todavía', texto: 'Cuando lo hagas, van a aparecer acá con su seguimiento.', accion: `<a class='btn btn-suave' href='#/reclamos/nuevo'>${Icons.r('plus', 'i-16')} Crear mi primer reclamo</a>` })}
@@ -364,5 +364,5 @@ Views.reclamos = (function () {
     };
   }
 
-  return { main: main, nuevo: nuevo, detalle: detalle };
+  return { main: main, nuevo: nuevo, detalle: detalle, badgeReclamo: badgeReclamo, timelineHtml: timelineHtml };
 })();

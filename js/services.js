@@ -77,16 +77,22 @@ window.Servicios = (function () {
     return reclamo;
   }
 
-  function avanzarReclamo(id) {
-    var st = S();
-    var rec = st.reclamos.filter(function (r) { return r.id === id; })[0];
-    if (!rec) return null;
+  function avanzarReclamoEstados(rec) {
     var estados = C().reclamoEstados;
     var idx = estados.indexOf(rec.estado);
     if (idx < 0 || idx >= estados.length - 1) return null;
     var nuevo = estados[idx + 1];
     rec.estado = nuevo;
     rec.timeline.push({ estado: nuevo, fecha: U.hoyISO(), comentario: C().comentariosReclamo[nuevo] || 'Actualización de estado (demo).' });
+    return nuevo;
+  }
+
+  function avanzarReclamo(id) {
+    var st = S();
+    var rec = st.reclamos.filter(function (r) { return r.id === id; })[0];
+    if (!rec) return null;
+    var nuevo = avanzarReclamoEstados(rec);
+    if (!nuevo) return null;
     notificar('reclamo', 'Tu reclamo avanzó (demo)', rec.numero + ' · ' + rec.titulo + ' pasó a: ' + nuevo + '.', 'reclamos/detalle/' + rec.id);
     logActividad('reclamo', 'Reclamo ' + rec.numero, nuevo, 'reclamos/detalle/' + rec.id);
     Store.save();
@@ -149,22 +155,29 @@ window.Servicios = (function () {
     return tramite;
   }
 
+  var TRAMITE_ESTADOS = ['Recibido', 'En revisión', 'En emisión', 'Listo para retirar', 'Finalizado'];
+  var TRAMITE_COMENTARIOS = {
+    'En revisión': 'El área responsable está evaluando la documentación (demo).',
+    'En emisión': 'Se está generando el documento solicitado (demo).',
+    'Listo para retirar': 'El documento está listo para retirar en la dependencia indicada (demo).',
+    'Finalizado': 'El trámite finalizó (demo).'
+  };
+
+  function avanzarTramiteEstados(tra) {
+    var idx = TRAMITE_ESTADOS.indexOf(tra.estado);
+    if (idx < 0 || idx >= TRAMITE_ESTADOS.length - 1) return null;
+    var nuevo = TRAMITE_ESTADOS[idx + 1];
+    tra.estado = nuevo;
+    tra.historial.push({ estado: nuevo, fecha: U.hoyISO(), comentario: TRAMITE_COMENTARIOS[nuevo] });
+    return nuevo;
+  }
+
   function avanzarTramite(id) {
     var st = S();
     var tra = st.tramites.filter(function (t) { return t.id === id; })[0];
     if (!tra) return null;
-    var estados = ['Recibido', 'En revisión', 'En emisión', 'Listo para retirar', 'Finalizado'];
-    var comentarios = {
-      'En revisión': 'El área responsable está evaluando la documentación (demo).',
-      'En emisión': 'Se está generando el documento solicitado (demo).',
-      'Listo para retirar': 'El documento está listo para retirar en la dependencia indicada (demo).',
-      'Finalizado': 'El trámite finalizó (demo).'
-    };
-    var idx = estados.indexOf(tra.estado);
-    if (idx < 0 || idx >= estados.length - 1) return null;
-    var nuevo = estados[idx + 1];
-    tra.estado = nuevo;
-    tra.historial.push({ estado: nuevo, fecha: U.hoyISO(), comentario: comentarios[nuevo] });
+    var nuevo = avanzarTramiteEstados(tra);
+    if (!nuevo) return null;
     notificar('tramite', 'Actualización de trámite (demo)', tra.numero + ' (' + tra.nombre + ') pasó a: ' + nuevo + '.', 'mis-tramites/' + tra.id);
     logActividad('tramite', 'Solicitud ' + tra.numero, nuevo, 'mis-tramites/' + tra.id);
     Store.save();
@@ -228,8 +241,114 @@ window.Servicios = (function () {
     Store.save();
   }
 
-  function iniciarSesion() { S().sesion.iniciada = true; Store.save(); }
-  function cerrarSesion() { S().sesion.iniciada = false; Store.save(); }
+  /* —— Autenticación (mock). Integración REST futura:
+     POST /auth/login → { token, rol, usuario } · POST /auth/registro · POST /auth/logout */
+  function sesionVacia() {
+    return { iniciada: false, rol: null, cuentaId: null, nombre: '', apellido: '', alias: '', email: '' };
+  }
+
+  function buscarCuenta(email) {
+    var limpio = String(email || '').trim().toLowerCase();
+    return S().cuentas.filter(function (c) { return c.email.toLowerCase() === limpio; })[0] || null;
+  }
+
+  function aplicarSesion(cta) {
+    var st = S();
+    st.sesion = { iniciada: true, rol: cta.rol, cuentaId: cta.id, nombre: cta.perfil.nombre, apellido: cta.perfil.apellido, alias: cta.perfil.alias || cta.perfil.nombre, email: cta.email };
+    if (cta.rol === 'ciudadano') {
+      ['nombre', 'apellido', 'alias', 'email', 'telefono', 'domicilio', 'barrio'].forEach(function (k) {
+        if (cta.perfil[k]) st.usuario[k] = cta.perfil[k];
+      });
+    }
+    Store.save();
+  }
+
+  function login(email, clave) {
+    var cta = buscarCuenta(email);
+    if (!cta) return { ok: false, campo: 'email', mensaje: 'No encontramos una cuenta con ese correo (demo).' };
+    if (cta.clave !== String(clave || '')) return { ok: false, campo: 'clave', mensaje: 'La clave no coincide con la cuenta (demo).' };
+    aplicarSesion(cta);
+    return { ok: true, rol: cta.rol, cuenta: cta };
+  }
+
+  function registrarCuenta(datos) {
+    var st = S();
+    if (buscarCuenta(datos.email)) return { ok: false, campo: 'email', mensaje: 'Ya existe una cuenta con ese correo en la demo.' };
+    var cuenta = {
+      id: U.uid('cta'),
+      email: datos.email,
+      clave: datos.clave,
+      rol: 'ciudadano',
+      perfil: {
+        nombre: datos.nombre,
+        apellido: datos.apellido,
+        alias: datos.nombre.split(' ')[0],
+        email: datos.email,
+        telefono: datos.telefono,
+        dni: datos.dni,
+        domicilio: '',
+        barrio: DEMO.catalogos.barrios[0]
+      }
+    };
+    st.cuentas.push(cuenta);
+    aplicarSesion(cuenta);
+    return { ok: true, cuenta: cuenta };
+  }
+
+  function cerrarSesion() { S().sesion = sesionVacia(); Store.save(); }
+  function rolActual() { var s = S().sesion; return s && s.iniciada ? s.rol : null; }
+
+  /* —— Panel de administración (mock). Integración REST futura:
+     GET /admin/resumen · GET /admin/multas · GET /admin/reclamos ·
+     GET /admin/tramites · GET /admin/ciudadanos · PATCH /admin/reclamos/:id ·
+     PATCH /admin/tramites/:id · PATCH /admin/ciudadanos/:id */
+  function M() { return S().municipal; }
+
+  function nombreCiudadano(id) {
+    var c = M().ciudadanos.filter(function (x) { return x.id === id; })[0];
+    return c ? c.nombre + ' ' + c.apellido : 'Ciudadano (demo)';
+  }
+
+  function resumenMunicipal() {
+    var m = M();
+    function contar(arr, estado) { return arr.filter(function (x) { return x.estado === estado; }).length; }
+    function sumar(arr) { return arr.reduce(function (a, x) { return a + (x.importe || 0) + (x.intereses || 0); }, 0); }
+    var pendientes = m.obligaciones.filter(function (o) { return o.estado === 'pendiente' || o.estado === 'vencida'; });
+    return {
+      multas: { pendientes: contar(m.multas, 'pendiente'), vencidas: contar(m.multas, 'vencida'), pagadas: contar(m.multas, 'pagada'), descargos: contar(m.multas, 'en_descargo'), total: m.multas.length },
+      impuestos: { pendientes: contar(m.obligaciones, 'pendiente'), vencidas: contar(m.obligaciones, 'vencida'), pagadas: contar(m.obligaciones, 'pagada'), proceso: contar(m.obligaciones, 'proceso'), total: m.obligaciones.length, deuda: sumar(pendientes) },
+      recaudado: sumar(m.obligaciones.filter(function (o) { return o.estado === 'pagada'; })) + sumar(m.multas.filter(function (x) { return x.estado === 'pagada'; })),
+      reclamos: { abiertos: m.reclamos.filter(function (r) { return r.estado !== 'Resuelto' && r.estado !== 'No corresponde'; }).length, total: m.reclamos.length },
+      tramites: { enCurso: m.tramites.filter(function (t) { return t.estado !== 'Finalizado'; }).length, total: m.tramites.length },
+      ciudadanos: { activos: contar(m.ciudadanos, 'activo'), bloqueados: contar(m.ciudadanos, 'bloqueado'), total: m.ciudadanos.length }
+    };
+  }
+
+  function avanzarReclamoMunicipal(id) {
+    var rec = M().reclamos.filter(function (r) { return r.id === id; })[0];
+    if (!rec) return null;
+    var nuevo = avanzarReclamoEstados(rec);
+    if (!nuevo) return null;
+    Store.save();
+    return nuevo;
+  }
+
+  function avanzarTramiteMunicipal(id) {
+    var tra = M().tramites.filter(function (t) { return t.id === id; })[0];
+    if (!tra) return null;
+    var nuevo = avanzarTramiteEstados(tra);
+    if (!nuevo) return null;
+    Store.save();
+    return nuevo;
+  }
+
+  function cambiarEstadoCiudadano(id) {
+    var c = M().ciudadanos.filter(function (x) { return x.id === id; })[0];
+    if (!c) return null;
+    c.estado = c.estado === 'activo' ? 'bloqueado' : 'activo';
+    Store.save();
+    return c.estado;
+  }
 
   function marcarLeida(id) {
     var n = S().notificaciones.filter(function (x) { return x.id === id; })[0];
@@ -260,8 +379,15 @@ window.Servicios = (function () {
     quitarVehiculo: quitarVehiculo,
     actualizarUsuario: actualizarUsuario,
     actualizarPreferencia: actualizarPreferencia,
-    iniciarSesion: iniciarSesion,
+    login: login,
+    registrarCuenta: registrarCuenta,
     cerrarSesion: cerrarSesion,
+    rolActual: rolActual,
+    nombreCiudadano: nombreCiudadano,
+    resumenMunicipal: resumenMunicipal,
+    avanzarReclamoMunicipal: avanzarReclamoMunicipal,
+    avanzarTramiteMunicipal: avanzarTramiteMunicipal,
+    cambiarEstadoCiudadano: cambiarEstadoCiudadano,
     marcarLeida: marcarLeida,
     marcarTodasLeidas: marcarTodasLeidas,
     sinLeer: sinLeer
