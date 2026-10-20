@@ -44,7 +44,7 @@ Requisitos previos que ya existen en el proyecto: `Icons.r('droplets')`, etc. (b
 
 ```js
       reportesAgua: [
-        { id: 'agu-1', numero: 'AGU-2026-000017', nivel: 'critico', direccion: 'Los Cedros 45', barrio: 'Barrio San Martín', personas: 4, asistencia: true, telefono: '3482 555-1234', notas: 'El agua entra por la calle y ya cubre 20 cm dentro de la casa.', fecha: D(-1, 22, 30), estado: 'En asistencia', timeline: [ { estado: 'Recibido', fecha: D(-1, 22, 31), comentario: 'Reporte crítico recibido. Prioridad alta (demo).' }, { estado: 'Verificado', fecha: D(-1, 23, 10), comentario: 'Defensa Civil verificó la situación en el domicilio (demo).' }, { estado: 'En asistencia', fecha: D(0, 0, 45), comentario: 'Brigada asignada con bomba de achique. Asistencia en camino (demo).' } ] }
+        { id: 'agu-1', numero: 'AGU-2026-000017', nivel: 'critico', direccion: 'Calle 14 N°45', barrio: 'Virgen Niña', personas: 4, asistencia: true, telefono: '3482 555-1234', notas: 'El agua entra por la calle y ya cubre 20 cm dentro de la casa.', fecha: D(-1, 22, 30), estado: 'En asistencia', timeline: [ { estado: 'Recibido', fecha: D(-1, 22, 31), comentario: 'Reporte crítico recibido. Prioridad alta (demo).' }, { estado: 'Verificado', fecha: D(-1, 23, 10), comentario: 'Defensa Civil verificó la situación en el domicilio (demo).' }, { estado: 'En asistencia', fecha: D(0, 0, 45), comentario: 'Brigada asignada con bomba de achique. Asistencia en camino (demo).' } ] }
       ],
 ```
 
@@ -263,7 +263,7 @@ node --check js/views/agua.js && node --check js/data.js && node --check js/stor
 2. Smoke test del ciclo completo (crear + avanzar hasta Cerrado + notificación):
 
 ```
-node -e "global.window=global;const fs=require('fs');eval(fs.readFileSync('js/utils.js','utf8'));eval(fs.readFileSync('js/data.js','utf8'));eval(fs.readFileSync('js/storage.js','utf8'));eval(fs.readFileSync('js/services.js','utf8'));Store.init();Servicios.iniciarSesion();const r=Servicios.crearReporteAgua({nivel:'leve',direccion:'Sarmiento 99',barrio:'Centro',personas:2,asistencia:false,telefono:'34825559999',notas:''});console.log(r.numero,r.estado,Servicios.avanzarReporteAgua(r.id),Servicios.avanzarReporteAgua(r.id),Servicios.avanzarReporteAgua(r.id),Servicios.avanzarReporteAgua(r.id));console.log('tipo notif:',Store.state.notificaciones[0].tipo);"
+node -e "global.window=global;const fs=require('fs');eval(fs.readFileSync('js/utils.js','utf8'));eval(fs.readFileSync('js/data.js','utf8'));eval(fs.readFileSync('js/storage.js','utf8'));eval(fs.readFileSync('js/services.js','utf8'));Store.init();Servicios.iniciarSesion();const r=Servicios.crearReporteAgua({nivel:'leve',direccion:'Calle 6 N°99',barrio:'Centro',personas:2,asistencia:false,telefono:'34825559999',notas:''});console.log(r.numero,r.estado,Servicios.avanzarReporteAgua(r.id),Servicios.avanzarReporteAgua(r.id),Servicios.avanzarReporteAgua(r.id),Servicios.avanzarReporteAgua(r.id));console.log('tipo notif:',Store.state.notificaciones[0].tipo);"
 ```
 
 Salida esperada: `AGU-2026-XXXXXX Recibido Verificado En asistencia Cerrado null` y `tipo notif: agua`.

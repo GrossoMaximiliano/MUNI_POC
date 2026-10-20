@@ -86,12 +86,17 @@ Views.agua = (function () {
           <div class='grupo-campos'>
             <div class='campo'>
               <label for='ag-dir'>Dirección del domicilio afectado</label>
-              <input id='ag-dir' class='control' type='text' maxlength='120' placeholder='Calle y altura, o referencia'>
+              <input id='ag-dir' class='control' type='text' maxlength='120' placeholder='Ej: Calle 6 N°340'>
             </div>
             <div class='campo'>
               <label for='ag-barrio'>Barrio o zona</label>
               <select id='ag-barrio' class='control'>${DEMO.catalogos.barrios.map(function (b) { return `<option ${u.barrio === b ? 'selected' : ''}>${U.escape(b)}</option>`; }).join('')}</select>
             </div>
+          </div>
+          <div class='campo'>
+            <label>Ubicación en el mapa</label>
+            <div class='mapa-sim' id='ag-mapa' aria-label='Mapa para marcar la ubicación de la vivienda'></div>
+            <span class='ayuda' id='ag-mapa-ayuda'>${w.mapa ? 'Ubicación marcada: ' + w.mapa.texto : 'Opcional: tocá el mapa para marcar el punto.'}</span>
           </div>
           <div class='grupo-campos'>
             <div class='campo'>
@@ -176,6 +181,7 @@ Views.agua = (function () {
         <div class='filas mt-16'>
           <div class='fila-datos'><span class='clave'>Domicilio</span><span class='valor'>${U.escape(rep.direccion)}</span></div>
           <div class='fila-datos'><span class='clave'>Barrio</span><span class='valor'>${U.escape(rep.barrio)}</span></div>
+          ${rep.ubicacionMapa ? `<div class='fila-datos'><span class='clave'>Punto en mapa</span><span class='valor'>${U.escape(rep.ubicacionMapa.texto)}</span></div>` : ''}
           <div class='fila-datos'><span class='clave'>Personas en la vivienda</span><span class='valor'>${rep.personas}</span></div>
           <div class='fila-datos'><span class='clave'>Asistencia especial</span><span class='valor'>${rep.asistencia ? 'Sí, se informó' : 'No'}</span></div>
           <div class='fila-datos'><span class='clave'>Contacto</span><span class='valor'>${U.escape(rep.telefono)}</span></div>
@@ -219,6 +225,17 @@ Views.agua = (function () {
     raiz.querySelectorAll('input[name=nivel]').forEach(function (r) {
       r.addEventListener('change', function () { w.nivel = r.value; });
     });
+    var contMapa = raiz.querySelector('#ag-mapa');
+    if (contMapa) {
+      Mapa.crear(contMapa, {
+        valor: w.mapa,
+        onChange: function (lat, lng) {
+          w.mapa = { lat: lat, lng: lng, texto: 'Lat ' + lat.toFixed(5) + ', Lng ' + lng.toFixed(5) };
+          var ayuda = raiz.querySelector('#ag-mapa-ayuda');
+          if (ayuda) ayuda.textContent = 'Ubicación marcada: ' + w.mapa.texto;
+        }
+      });
+    }
     var btnFoto = raiz.querySelector('#ag-foto-btn');
     var inputFoto = raiz.querySelector('#ag-foto');
     if (btnFoto && inputFoto) {
@@ -253,7 +270,8 @@ Views.agua = (function () {
         asistencia: !!(raiz.querySelector('#ag-asistencia') || {}).checked,
         telefono: tel.value.trim(),
         notas: raiz.querySelector('#ag-notas').value.trim(),
-        foto: w.foto
+        foto: w.foto,
+        ubicacionMapa: w.mapa || null
       };
       w.paso = 2;
       Router.refrescar();

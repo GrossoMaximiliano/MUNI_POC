@@ -86,7 +86,7 @@ Views.agua = (function () {
           <div class='grupo-campos'>
             <div class='campo'>
               <label for='ag-dir'>Dirección del domicilio afectado</label>
-              <input id='ag-dir' class='control' type='text' maxlength='120' placeholder='Calle y altura, o referencia'>
+              <input id='ag-dir' class='control' type='text' maxlength='120' placeholder='Ej: Calle 6 N°340'>
             </div>
             <div class='campo'>
               <label for='ag-barrio'>Barrio o zona</label>

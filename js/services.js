@@ -145,6 +145,7 @@ window.Servicios = (function () {
       nivel: datos.nivel,
       direccion: datos.direccion,
       barrio: datos.barrio,
+      ubicacionMapa: datos.ubicacionMapa || null,
       personas: datos.personas || 1,
       asistencia: !!datos.asistencia,
       telefono: datos.telefono,

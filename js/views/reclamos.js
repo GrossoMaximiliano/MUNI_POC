@@ -89,16 +89,13 @@ Views.reclamos = (function () {
             </div>
             <div class='campo'>
               <label for='rec-dir'>Dirección o referencia</label>
-              <input id='rec-dir' class='control' type='text' maxlength='120' value='${U.escape(w.direccion)}' placeholder='Calle y altura, o esquina'>
+              <input id='rec-dir' class='control' type='text' maxlength='120' value='${U.escape(w.direccion)}' placeholder='Ej: Calle 12 N°901'>
             </div>
           </div>
           <div class='campo'>
-            <label>Ubicación en el mapa (simulado)</label>
-            <div class='mapa-sim' id='rec-mapa' role='button' tabindex='0' aria-label='Tocá el mapa para marcar la ubicación aproximada'>
-              ${w.mapa ? `<span class='mapa-pin' style='left:${w.mapa.x}%;top:${w.mapa.y}%'>${Icons.r('map-pin')}</span>` : ''}
-              <span class='mapa-rotulo'>Mapa simulado — en la app final sería interactivo</span>
-            </div>
-            ${w.mapa ? `<span class='ayuda'>Marcaste una posición aproximada: ${w.mapa.texto}</span>` : '<span class="ayuda">Opcional: tocá el mapa para marcar el punto.</span>'}
+            <label>Ubicación en el mapa</label>
+            <div class='mapa-sim' id='rec-mapa' aria-label='Mapa para marcar la ubicación del reclamo'></div>
+            <span class='ayuda' id='rec-mapa-ayuda'>${w.mapa ? 'Ubicación marcada: ' + w.mapa.texto : 'Opcional: tocá el mapa para marcar el punto.'}</span>
           </div>
           <div class='campo'>
             <label>Fotografía (opcional)</label>
@@ -202,22 +199,14 @@ Views.reclamos = (function () {
         Router.refrescar();
       });
     }
-    var mapa = raiz.querySelector('#rec-mapa');
-    if (mapa) {
-      var marcar = function (e) {
-        var rect = mapa.getBoundingClientRect();
-        var x = Math.round(((e.clientX - rect.left) / rect.width) * 100);
-        var y = Math.round(((e.clientY - rect.top) / rect.height) * 100);
-        x = Math.max(4, Math.min(96, x)); y = Math.max(8, Math.min(94, y));
-        w.mapa = { x: x, y: y, texto: 'aprox. ' + (29 + y / 100).toFixed(3) + ' S, ' + (59.7 + x / 100).toFixed(3) + ' O (simulado)' };
-        Router.refrescar();
-      };
-      mapa.addEventListener('click', marcar);
-      mapa.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          var r2 = mapa.getBoundingClientRect();
-          marcar({ clientX: r2.left + r2.width / 2, clientY: r2.top + r2.height / 2 });
+    var contMapa = raiz.querySelector('#rec-mapa');
+    if (contMapa) {
+      Mapa.crear(contMapa, {
+        valor: w.mapa,
+        onChange: function (lat, lng) {
+          w.mapa = { lat: lat, lng: lng, texto: 'Lat ' + lat.toFixed(5) + ', Lng ' + lng.toFixed(5) };
+          var ayuda = raiz.querySelector('#rec-mapa-ayuda');
+          if (ayuda) ayuda.textContent = 'Ubicación marcada: ' + w.mapa.texto;
         }
       });
     }

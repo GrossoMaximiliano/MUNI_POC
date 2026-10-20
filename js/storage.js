@@ -23,7 +23,7 @@ window.Store = (function () {
         var crudo = window.localStorage.getItem(CLAVE);
         if (crudo) {
           var datos = JSON.parse(crudo);
-          if (datos && datos.version === 2) state = datos;
+          if (datos && datos.version === 3) state = datos;
         }
       } catch (e) { state = null; }
     }
