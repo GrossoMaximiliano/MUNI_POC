@@ -66,6 +66,10 @@ window.DEMO = (function () {
         { id: 'not-5', tipo: 'turno', titulo: 'Recordatorio de turno', mensaje: 'Tenés un turno en Oficina de Rentas (demo) el ' + U.fecha(D(3)) + ' a las 09:30 h.', fecha: D(-1, 12, 0), leida: false, ref: 'turnos' },
         { id: 'not-6', tipo: 'comunicado', titulo: 'Comunicado municipal (demo)', mensaje: 'Campaña de vacunación antirrábica — contenido de demostración, no es un comunicado real.', fecha: D(-8, 12, 0), leida: true, ref: 'ayuda' }
       ],
+      solicitudesServicios: [
+        { id: 'ser-1', numero: 'SER-2026-000017', ciudadanoId: 'cta-vecino', ciudadanoNombre: 'Maximiliano Rodríguez', ciudadanoEmail: 'maxi.vecino@ejemplo.com', tipoId: 'atmosferico', tipo: 'Camión atmosférico (desagote de pozos negros)', direccion: 'Calle 12 N°245', fechaPreferida: D(3, 9, 0).slice(0, 10), telefono: '3482 555-1234', observaciones: 'Coordinar por la mañana (demo).', fechaSolicitud: D(-1, 10, 15), estado: 'Pendiente' },
+        { id: 'ser-2', numero: 'SER-2026-000018', ciudadanoId: 'cta-vecino', ciudadanoNombre: 'Maximiliano Rodríguez', ciudadanoEmail: 'maxi.vecino@ejemplo.com', tipoId: 'ramas', tipo: 'Junte de ramas / poda', direccion: 'Calle 6 N°340', fechaPreferida: D(6, 9, 0).slice(0, 10), telefono: '3482 555-1234', observaciones: 'Ramas apiladas sobre la vereda (demo).', fechaSolicitud: D(-2, 11, 0), estado: 'Programada' }
+      ],
       municipal: {
         ciudadanos: [
           { id: 'ciu-1', nombre: 'Maximiliano', apellido: 'Rodríguez', dni: '31.482.907', email: 'maxi.vecino@ejemplo.com', telefono: '3482 555-1234', domicilio: 'Calle 12 N°245', barrio: 'Centro', fechaAlta: D(-540, 9, 0), estado: 'activo' },
@@ -175,6 +179,16 @@ window.DEMO = (function () {
       { id: 'otros', nombre: 'Otros problemas municipales', icono: 'help-circle' }
     ],
     barrios: ['Centro', 'Fátima', 'Virgen Niña', 'Itatí', 'Zona rural'],
+    serviciosMunicipales: [
+      { id: 'atmosferico', nombre: 'Camión atmosférico (desagote de pozos negros)' },
+      { id: 'ramas', nombre: 'Junte de ramas / poda' },
+      { id: 'voluminosos', nombre: 'Recolección de residuos voluminosos (muebles, electrodomésticos)' },
+      { id: 'desmalezado', nombre: 'Desmalezado / limpieza de terreno baldío' },
+      { id: 'riego', nombre: 'Riego de calles' },
+      { id: 'cunetas', nombre: 'Zanjeo / limpieza de cunetas' },
+      { id: 'arbol-riesgo', nombre: 'Corte o retiro de árbol (riesgo)' },
+      { id: 'otros', nombre: 'Otros' }
+    ],
     reclamoEstados: ['Recibido', 'En revisión', 'Derivado al área correspondiente', 'En resolución', 'Resuelto'],
     reclamoEstadosInfo: { 'Requiere información': 'El área necesita datos adicionales del vecino (demo).' , 'No corresponde': 'El tema tratado no es competencia municipal (demo).' },
     comentariosReclamo: {

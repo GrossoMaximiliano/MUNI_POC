@@ -161,6 +161,34 @@ window.Servicios = (function () {
     return rep;
   }
 
+  // Mock de POST /solicitudes-servicios; cada registro queda asociado a la cuenta ciudadana activa.
+  function crearSolicitudServicio(datos) {
+    var st = S();
+    var sesion = st.sesion;
+    if (!sesion || !sesion.iniciada || sesion.rol !== 'ciudadano' || !sesion.cuentaId) return null;
+    var def = C().serviciosMunicipales.filter(function (x) { return x.id === datos.tipoId; })[0];
+    if (!def) return null;
+    var tipo = def.id === 'otros' ? 'Otros: ' + String(datos.detalleOtro || '').trim() : def.nombre;
+    var solicitud = {
+      id: U.uid('ser'),
+      numero: 'SER-2026-' + pad(17 + st.solicitudesServicios.length),
+      ciudadanoId: sesion.cuentaId,
+      ciudadanoNombre: sesion.nombre + ' ' + sesion.apellido,
+      ciudadanoEmail: sesion.email,
+      tipoId: def.id,
+      tipo: tipo,
+      direccion: datos.direccion,
+      fechaPreferida: datos.fechaPreferida,
+      telefono: datos.telefono,
+      observaciones: datos.observaciones || '',
+      fechaSolicitud: U.hoyISO(),
+      estado: 'Pendiente'
+    };
+    st.solicitudesServicios.unshift(solicitud);
+    Store.save();
+    return solicitud;
+  }
+
   function avanzarReporteAgua(id) {
     var st = S();
     var rep = st.reportesAgua.filter(function (r) { return r.id === id; })[0];
@@ -412,6 +440,7 @@ window.Servicios = (function () {
     avanzarReclamo: avanzarReclamo,
     crearReporteAgua: crearReporteAgua,
     avanzarReporteAgua: avanzarReporteAgua,
+    crearSolicitudServicio: crearSolicitudServicio,
     iniciarDescargo: iniciarDescargo,
     avanzarDescargo: avanzarDescargo,
     crearTramite: crearTramite,

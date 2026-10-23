@@ -38,9 +38,9 @@ index.html                      Estructura principal (shell de la SPA)
 css/styles.css                  Variables de marca, componentes, responsive, impresión
 js/icons.js                     Biblioteca de iconos SVG (estilo Lucide, embebidos)
 js/utils.js                     Formato de moneda ($ 24.500,00), fechas (DD/MM/AAAA), validaciones
-js/data.js                      Datos ficticios, cuentas demo y dataset del panel de administración
+js/data.js                      Datos ficticios, solicitudes de servicios y dataset del panel de administración
 js/storage.js                   Persistencia en localStorage + reinicio de la demo
-js/services.js                  Operaciones de dominio simuladas (auth, pagos, reclamos, trámites, panel admin)
+js/services.js                  Operaciones de dominio simuladas (auth, pagos, reclamos, servicios, trámites, panel admin)
 js/ui.js                        Componentes compartidos: modales, toasts, badges, validación
 js/mapa.js                      Mapa Leaflet + OpenStreetMap para marcar ubicaciones
 js/app.js                       Router por hash, guard por rol, navegación y arranque
@@ -49,6 +49,7 @@ js/views/home.js                Pantalla de inicio
 js/views/pagos.js               Deuda, detalle, flujo de pago simulado, comprobantes
 js/views/vehiculos.js           Vehículos, infracciones, descargos
 js/views/reclamos.js            Formulario de reclamos y seguimiento
+js/views/servicios.js           Catálogo y solicitudes mock de servicios municipales
 js/views/tramites.js            Catálogo, solicitudes y "Mis trámites"
 js/views/turnos.js              Solicitud de turnos y "Mis turnos"
 js/views/perfil.js              Perfil, preferencias, sesión y reinicio de demo
@@ -81,6 +82,7 @@ La pantalla de ingreso incluye botones de acceso rápido con ambas cuentas. Tamb
 - **Pagos e impuestos**: listado con filtros por categoría y estado, detalle con intereses de ejemplo, flujo de pago en 3 pasos con resultado **aprobado o rechazado (simulado)**, comprobante imprimible (`Imprimir` usa el diálogo del navegador).
 - **Vehículos y multas**: vehículos demo, consulta por dominio (simulada), infracciones con pago simulado y descargo ficticio con seguimiento.
 - **Reclamos**: asistente en 3 pasos (categoría, formulario con foto y mapa Leaflet/OpenStreetMap para marcar la ubicación, revisión), confirmación con número ficticio y línea de tiempo de seguimiento con avance simulado.
+- **Solicitar servicios**: catálogo municipal, formulario validado y “Mis solicitudes” con estado. Las solicitudes mock se guardan por `ciudadanoId` en `Store.state.solicitudesServicios`.
 - **Trámites**: catálogo con búsqueda y categorías, detalle con requisitos, solicitud con revisión previa y "Mis trámites".
 - **Turnos**: tipo (incluye castración de mascotas, licencia de conducir y consulta psicológica para licencia, con campos propios y dependencia asignada), dependencia, día y horario (disponibilidad simulada), revisión, confirmación y cancelación.
 - **Perfil**: datos editables, preferencias de notificaciones, vehículos, inmuebles, historiales, sesión simulada y **reinicio de la demo**.
