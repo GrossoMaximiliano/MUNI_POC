@@ -136,6 +136,75 @@ window.Servicios = (function () {
     return nuevo;
   }
 
+  function crearReporteAgua(datos) {
+    var st = S();
+    var critico = datos.nivel === 'critico';
+    var rep = {
+      id: U.uid('agu'),
+      numero: 'AGU-2026-' + pad(18 + st.reportesAgua.length),
+      nivel: datos.nivel,
+      direccion: datos.direccion,
+      barrio: datos.barrio,
+      ubicacionMapa: datos.ubicacionMapa || null,
+      personas: datos.personas || 1,
+      asistencia: !!datos.asistencia,
+      telefono: datos.telefono,
+      notas: datos.notas || '',
+      fecha: U.hoyISO(),
+      estado: 'Recibido',
+      timeline: [ { estado: 'Recibido', fecha: U.hoyISO(), comentario: critico ? 'Reporte crítico recibido. Prioridad alta: se contactará al teléfono indicado (demo).' : 'Reporte recibido. Quedó registrado para seguimiento (demo).' } ]
+    };
+    st.reportesAgua.unshift(rep);
+    notificar('agua', 'Reporte por lluvias recibido (demo)', rep.numero + ' · ' + (critico ? 'Ingreso crítico' : 'Ingreso leve') + ' · ' + rep.direccion + ', ' + rep.barrio + '.', 'agua/detalle/' + rep.id);
+    logActividad('agua', 'Reporte por lluvias ' + rep.numero, critico ? 'Ingreso crítico' : 'Ingreso leve', 'agua/detalle/' + rep.id);
+    Store.save();
+    return rep;
+  }
+
+  // Mock de POST /solicitudes-servicios; cada registro queda asociado a la cuenta ciudadana activa.
+  function crearSolicitudServicio(datos) {
+    var st = S();
+    var sesion = st.sesion;
+    if (!sesion || !sesion.iniciada || sesion.rol !== 'ciudadano' || !sesion.cuentaId) return null;
+    var def = C().serviciosMunicipales.filter(function (x) { return x.id === datos.tipoId; })[0];
+    if (!def) return null;
+    var tipo = def.id === 'otros' ? 'Otros: ' + String(datos.detalleOtro || '').trim() : def.nombre;
+    var solicitud = {
+      id: U.uid('ser'),
+      numero: 'SER-2026-' + pad(17 + st.solicitudesServicios.length),
+      ciudadanoId: sesion.cuentaId,
+      ciudadanoNombre: sesion.nombre + ' ' + sesion.apellido,
+      ciudadanoEmail: sesion.email,
+      tipoId: def.id,
+      tipo: tipo,
+      direccion: datos.direccion,
+      fechaPreferida: datos.fechaPreferida,
+      telefono: datos.telefono,
+      observaciones: datos.observaciones || '',
+      fechaSolicitud: U.hoyISO(),
+      estado: 'Pendiente'
+    };
+    st.solicitudesServicios.unshift(solicitud);
+    Store.save();
+    return solicitud;
+  }
+
+  function avanzarReporteAgua(id) {
+    var st = S();
+    var rep = st.reportesAgua.filter(function (r) { return r.id === id; })[0];
+    if (!rep) return null;
+    var estados = C().estadosAgua;
+    var idx = estados.indexOf(rep.estado);
+    if (idx < 0 || idx >= estados.length - 1) return null;
+    var nuevo = estados[idx + 1];
+    rep.estado = nuevo;
+    rep.timeline.push({ estado: nuevo, fecha: U.hoyISO(), comentario: C().comentariosAgua[nuevo] });
+    notificar('agua', 'Tu reporte por lluvias avanzó (demo)', rep.numero + ' pasó a: ' + nuevo + '.', 'agua/detalle/' + rep.id);
+    logActividad('agua', 'Reporte por lluvias ' + rep.numero, nuevo, 'agua/detalle/' + rep.id);
+    Store.save();
+    return nuevo;
+  }
+
   function crearTramite(def, datos) {
     var st = S();
     var tramite = {
@@ -369,6 +438,9 @@ window.Servicios = (function () {
     registrarPago: registrarPago,
     crearReclamo: crearReclamo,
     avanzarReclamo: avanzarReclamo,
+    crearReporteAgua: crearReporteAgua,
+    avanzarReporteAgua: avanzarReporteAgua,
+    crearSolicitudServicio: crearSolicitudServicio,
     iniciarDescargo: iniciarDescargo,
     avanzarDescargo: avanzarDescargo,
     crearTramite: crearTramite,

@@ -52,7 +52,21 @@ Views.home = (function () {
     { href: '#/mis-tramites', icono: 'clipboard', texto: 'Mis trámites' }
   ];
 
-  var iconosActividad = { pago: 'dollar', reclamo: 'megaphone', tramite: 'clipboard', multa: 'alert-triangle', turno: 'calendar-check', consulta: 'eye' };
+  var iconosActividad = { pago: 'dollar', reclamo: 'megaphone', tramite: 'clipboard', multa: 'alert-triangle', turno: 'calendar-check', consulta: 'eye', agua: 'droplets' };
+
+  function accesoAgua() {
+    var activos = Store.state.reportesAgua.filter(function (r) { return r.estado !== 'Cerrado'; }).length;
+    return `
+      <a class='acceso acceso-emergencia' href='#/agua/nuevo'>
+        <span class='tinte t-rojo item-ico'>${Icons.r('droplets', 'i-26')}</span>
+        <span style='flex:1;min-width:0'>
+          <span class='item-titulo' style='display:block'>¿Estás siendo afectado por las lluvias?</span>
+          <span class='item-sub' style='margin-top:2px'><span>Reportá tu situación · Alerta El Niño (demo)</span></span>
+        </span>
+        ${activos ? `<span class='badge b-peligro'>${activos} activo${activos === 1 ? '' : 's'}</span>` : ''}
+        <span class='flecha'>${Icons.r('chevron-right')}</span>
+      </a>`;
+  }
 
   function itemActividad(a) {
     return `
@@ -96,6 +110,7 @@ Views.home = (function () {
           ${accesos.map(function (a) {
             return `<a class='acceso' href='${a.href}'><span class='tinte t-azul'>${Icons.r(a.icono, 'i-22')}</span>${a.texto}</a>`;
           }).join('')}
+          ${accesoAgua()}
         </div>
       </section>
       <section class='seccion'>

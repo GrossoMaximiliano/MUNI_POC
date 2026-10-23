@@ -23,12 +23,14 @@ window.Store = (function () {
         var crudo = window.localStorage.getItem(CLAVE);
         if (crudo) {
           var datos = JSON.parse(crudo);
-          if (datos && datos.version === 2) state = datos;
+          if (datos && datos.version === 3) state = datos;
         }
       } catch (e) { state = null; }
     }
     if (!state) seed();
     if (!state.sesion) state.sesion = { iniciada: false, rol: null, cuentaId: null, nombre: '', apellido: '', alias: '', email: '' };
+    if (!state.reportesAgua) state.reportesAgua = [];
+    if (!Array.isArray(state.solicitudesServicios)) state.solicitudesServicios = DEMO.estadoInicial().solicitudesServicios || [];
     save();
     return state;
   }

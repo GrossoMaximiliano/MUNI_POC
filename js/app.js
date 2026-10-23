@@ -31,7 +31,7 @@
     if (esAdmin()) {
       clave = segs[0] === 'perfil' ? 'perfil' : (segs[1] || 'admin');
     } else {
-      var mapa = { inicio: 'inicio', pagos: 'pagos', vehiculos: 'pagos', reclamos: 'reclamos', tramites: 'tramites', 'mis-tramites': 'tramites', turnos: 'tramites', perfil: 'perfil' };
+      var mapa = { inicio: 'inicio', pagos: 'pagos', vehiculos: 'pagos', reclamos: 'reclamos', agua: 'inicio', servicios: 'servicios', tramites: 'tramites', 'mis-tramites': 'tramites', turnos: 'tramites', perfil: 'perfil' };
       clave = mapa[segs[0]] || '';
     }
     document.querySelectorAll('[data-seccion]').forEach(function (a) {
@@ -172,6 +172,7 @@
         { clave: 'inicio', href: '#/inicio', icono: 'home', texto: 'Inicio' },
         { clave: 'pagos', href: '#/pagos', icono: 'wallet', texto: 'Pagos' },
         { clave: 'reclamos', href: '#/reclamos', icono: 'megaphone', texto: 'Reclamos' },
+        { clave: 'servicios', href: '#/servicios', icono: 'wrench', texto: 'Servicios' },
         { clave: 'tramites', href: '#/tramites', icono: 'clipboard', texto: 'Trámites' },
         { clave: 'perfil', href: '#/perfil', icono: 'user', texto: 'Perfil' }
       ];
@@ -180,6 +181,7 @@
         { clave: 'pagos', href: '#/pagos', icono: 'wallet', texto: 'Pagos e impuestos' },
         { clave: '', href: '#/vehiculos', icono: 'car', texto: 'Vehículos y multas' },
         { clave: 'reclamos', href: '#/reclamos', icono: 'megaphone', texto: 'Reclamos' },
+        { clave: 'servicios', href: '#/servicios', icono: 'wrench', texto: 'Solicitar servicios' },
         { clave: 'tramites', href: '#/tramites', icono: 'clipboard', texto: 'Trámites y turnos' },
         { clave: 'perfil', href: '#/perfil', icono: 'user', texto: 'Mi perfil' },
         { sep: true },
@@ -210,6 +212,11 @@
     add('reclamos', function () { return Views.reclamos.main(); });
     add('reclamos/nuevo', function () { return Views.reclamos.nuevo(); });
     add('reclamos/detalle/:id', function (p) { return Views.reclamos.detalle(p.id); });
+    add('agua', function () { return Views.agua.main(); });
+    add('agua/nuevo', function () { return Views.agua.nuevo(); });
+    add('agua/detalle/:id', function (p) { return Views.agua.detalle(p.id); });
+    add('servicios', function () { return Views.servicios.main(); });
+    add('servicios/nuevo', function () { return Views.servicios.nuevo(); });
     add('tramites', function () { return Views.tramites.main(); });
     add('tramites/detalle/:id', function (p) { return Views.tramites.detalle(p.id); });
     add('tramites/solicitar/:id', function (p) { return Views.tramites.solicitar(p.id); });
