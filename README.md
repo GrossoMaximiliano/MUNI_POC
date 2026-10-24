@@ -60,6 +60,8 @@ js/views/admin/multas.js        Multas del municipio: búsqueda, filtros y detal
 js/views/admin/reclamos.js      Gestión de reclamos con avance de estado
 js/views/admin/tramites.js      Gestión de trámites con avance de estado
 js/views/admin/ciudadanos.js    Padrón de ciudadanos, deuda y bloqueo (simulado)
+js/views/admin/extracciones.js  Extracciones de vehículos (grúa): registro del inspector con multa automática
+js/views/admin/solicitudes.js   Solicitudes de servicios de los vecinos: listado y avance de estado
 assets/logo-municipalidad.png  Escudo oficial de la Municipalidad de Las Toscas
 ```
 
@@ -77,7 +79,7 @@ La pantalla de ingreso incluye un botón de acceso rápido con la cuenta ciudada
 ## Qué incluye la demo
 
 - **Ingreso y registro (demo)**: login con correo y clave (validaciones de formato y credenciales), registro de nuevos ciudadanos con validaciones (DNI, correo, teléfono, claves con confirmación) y accesos rápidos con las cuentas ficticias. La sesión distingue roles: el ciudadano ve el portal; el personal municipal ve el panel de administración y es redirigido si intenta entrar al portal (y viceversa).
-- **Panel de administración (demo)**: resumen de multas e impuestos (pendientes, pagadas, vencidas, en descargo), recaudación simulada, indicadores de atención ciudadana, multas con búsqueda y filtros por estado, gestión de reclamos y trámites con avance de estado, y padrón de ciudadanos con deuda y bloqueo/reactivación simulada.
+- **Panel de administración (demo)**: resumen municipal (multas e impuestos pendientes/pagadas/vencidas/en descargo, recaudación simulada, indicadores de atención ciudadana, extracciones y solicitudes), multas con búsqueda y filtros por estado, extracciones de vehículos con grúa donde el inspector registra el retiro y se genera automáticamente el acta de infracción, gestión de reclamos con avance de estado, módulo de solicitudes de servicios de los vecinos con avance de estado, trámites con avance de estado, y padrón de ciudadanos con deuda y bloqueo/reactivación simulada.
 - **Inicio** con resumen de cuenta, próximo vencimiento, accesos rápidos, actividad reciente y avisos (marcados como demo).
 - **Pagos e impuestos**: listado con filtros por categoría y estado, detalle con intereses de ejemplo, flujo de pago en 3 pasos con resultado **aprobado o rechazado (simulado)**, comprobante imprimible (`Imprimir` usa el diálogo del navegador).
 - **Vehículos y multas**: vehículos demo, consulta por dominio (simulada), infracciones con pago simulado y descargo ficticio con seguimiento.

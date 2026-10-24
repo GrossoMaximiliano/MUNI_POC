@@ -15,12 +15,13 @@ Views.adminDashboard = (function () {
     var items = [];
     m.reclamos.forEach(function (r) { items.push({ tipo: 'reclamo', titulo: r.numero + ' · ' + r.titulo, estado: r.estado, ref: 'admin/reclamo/' + r.id, fecha: r.fecha }); });
     m.tramites.forEach(function (t) { items.push({ tipo: 'tramite', titulo: t.numero + ' · ' + t.nombre, estado: t.estado, ref: 'admin/tramite/' + t.id, fecha: t.fecha }); });
+    (m.extracciones || []).forEach(function (x) { items.push({ tipo: 'extraccion', titulo: x.numero + ' · ' + x.dominio, estado: x.estado, ref: 'admin/extraccion/' + x.id, fecha: x.fecha }); });
     m.multas.forEach(function (x) { items.push({ tipo: 'multa', titulo: 'Acta ' + x.acta + ' · ' + Servicios.nombreCiudadano(x.ciudadanoId), estado: x.estado === 'pagada' ? 'Pagada' : (x.estado === 'vencida' ? 'Vencida' : (x.estado === 'en_descargo' ? 'En descargo' : 'Pendiente')), ref: 'admin/multa/' + x.id, fecha: x.fecha }); });
     items.sort(function (a, b) { return new Date(b.fecha) - new Date(a.fecha); });
     return items.slice(0, 4);
   }
 
-  var iconosActividad = { reclamo: 'megaphone', tramite: 'clipboard', multa: 'alert-triangle' };
+  var iconosActividad = { reclamo: 'megaphone', tramite: 'clipboard', multa: 'alert-triangle', extraccion: 'truck' };
 
   function itemActividad(a) {
     return `
@@ -56,7 +57,9 @@ Views.adminDashboard = (function () {
         <div class='pc-vencimiento'>${Icons.r('dollar', 'i-16')}<span><strong>Recaudación simulada: ${U.money(r.recaudado)}</strong><br>${r.impuestos.pagadas + r.multas.pagadas} operaciones pagadas dentro de la demo (multas + impuestos).</span></div>
         <div class='pc-opciones'>
           <a class='pc-op' href='#/admin/multas'>${Icons.r('alert-triangle')}<span>Multas</span></a>
+          <a class='pc-op' href='#/admin/extracciones'>${Icons.r('truck')}<span>Extracciones</span></a>
           <a class='pc-op' href='#/admin/reclamos'>${Icons.r('megaphone')}<span>Reclamos</span></a>
+          <a class='pc-op' href='#/admin/solicitudes'>${Icons.r('wrench')}<span>Solicitudes</span></a>
           <a class='pc-op' href='#/admin/tramites'>${Icons.r('clipboard')}<span>Trámites</span></a>
           <a class='pc-op' href='#/admin/ciudadanos'>${Icons.r('users')}<span>Ciudadanos</span></a>
         </div>
@@ -69,6 +72,15 @@ Views.adminDashboard = (function () {
           ${kpi('t-rojo', 'alert-triangle', r.multas.vencidas, 'Vencidas')}
           ${kpi('t-verde', 'check-circle', r.multas.pagadas, 'Pagadas')}
           ${kpi('t-azul', 'shield-check', r.multas.descargos, 'En descargo')}
+        </div>
+      </section>
+
+      <section class='seccion'>
+        <div class='seccion-cabeza'><h2>Extracciones y depósito</h2><a class='enlace' href='#/admin/extracciones'>Ver todas</a></div>
+        <div class='kpi-grid'>
+          ${kpi('t-ambar', 'truck', r.extracciones.enDeposito, 'En depósito')}
+          ${kpi('t-verde', 'check-circle', r.extracciones.entregadas, 'Entregadas')}
+          ${kpi('t-azul', 'calendar', r.extracciones.total, 'Total registradas')}
         </div>
       </section>
 
@@ -91,6 +103,7 @@ Views.adminDashboard = (function () {
         <div class='kpi-grid'>
           ${kpi('t-ambar', 'megaphone', r.reclamos.abiertos, 'Reclamos abiertos')}
           ${kpi('t-azul', 'clipboard', r.tramites.enCurso, 'Trámites en curso')}
+          ${kpi('t-azul', 'wrench', r.solicitudes.pendientes, 'Solicitudes pendientes')}
           ${kpi('t-verde', 'user-check', r.ciudadanos.activos, 'Ciudadanos activos')}
           ${kpi('t-rojo', 'user-x', r.ciudadanos.bloqueados, 'Bloqueados')}
         </div>

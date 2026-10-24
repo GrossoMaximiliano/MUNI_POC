@@ -436,6 +436,15 @@ window.Servicios = (function () {
     return '2026-' + pad(max + 1, 5);
   }
 
+  function proximoNumeroExtraccion() {
+    var max = 0;
+    ((M().extracciones) || []).forEach(function (x) {
+      var n = parseInt(String(x.numero || '').split('-')[2] || '0', 10);
+      if (!isNaN(n) && n > max) max = n;
+    });
+    return 'EXT-2026-' + pad(max + 1, 6);
+  }
+
   /* Mock de POST /admin/extracciones: registra el retiro con grúa y genera
      automáticamente el acta de infracción asociada al motivo (demo). */
   function registrarExtraccion(datos) {
@@ -465,7 +474,7 @@ window.Servicios = (function () {
     m.multas.unshift(multa);
     var extraccion = {
       id: U.uid('ext'),
-      numero: 'EXT-2026-' + pad(43 + m.extracciones.length, 6),
+      numero: proximoNumeroExtraccion(),
       fecha: fecha,
       dominio: datos.dominio,
       tipoVehiculo: datos.tipoVehiculo,
