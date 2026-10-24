@@ -48,6 +48,7 @@ Views.home = (function () {
     { href: '#/vehiculos', icono: 'car', texto: 'Consultar patentes' },
     { href: '#/vehiculos/multas', icono: 'alert-triangle', texto: 'Ver multas' },
     { href: '#/reclamos/nuevo', icono: 'megaphone', texto: 'Hacer un reclamo' },
+    { href: '#/servicios', icono: 'wrench', texto: 'Solicitar servicios' },
     { href: '#/turnos/nuevo', icono: 'calendar-check', texto: 'Pedir un turno' },
     { href: '#/mis-tramites', icono: 'clipboard', texto: 'Mis trámites' }
   ];

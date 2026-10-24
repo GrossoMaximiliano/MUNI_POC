@@ -72,7 +72,7 @@ El login es **simulado** (las claves se guardan sin cifrar en el navegador; nunc
 | Ciudadano | `maxi.vecino@ejemplo.com` | `demo1234` |
 | Personal municipal (admin) | `gestion@lascoscas.gob.ar` | `demo1234` |
 
-La pantalla de ingreso incluye botones de acceso rápido con ambas cuentas. También se pueden registrar nuevos ciudadanos desde el formulario de registro (validaciones de DNI, correo, teléfono y claves).
+La pantalla de ingreso incluye un botón de acceso rápido con la cuenta ciudadana; la cuenta de personal municipal ingresa con correo y clave desde el formulario de ingreso. También se pueden registrar nuevos ciudadanos desde el formulario de registro (validaciones de DNI, correo, teléfono y claves).
 
 ## Qué incluye la demo
 

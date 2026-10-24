@@ -69,6 +69,7 @@ window.Icons = (function () {
   d['user-check'] = `<path d='M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/><circle cx='8.5' cy='7' r='4'/><polyline points='17 11 19 13 23 9'/>`;
   d['user-x'] = `<path d='M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/><circle cx='8.5' cy='7' r='4'/><line x1='18' y1='8' x2='23' y2='13'/><line x1='23' y1='8' x2='18' y2='13'/>`;
   d['id-card'] = `<rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='9' cy='11' r='2'/><path d='M6.3 16.5a3 3 0 0 1 5.4 0'/><path d='M14 9h4'/><path d='M14 13h4'/>`;
+  d.truck = `<path d='M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2'/><path d='M15 18H9'/><path d='M19 18h1a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14'/><circle cx='17' cy='18' r='2'/><circle cx='7' cy='18' r='2'/>`;
   var r = function (nombre, clase) {
     var svg = d[nombre] || d['help-circle'];
     return `<svg class='icon ${clase || ''}' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'>${svg}</svg>`;

@@ -2,7 +2,7 @@ window.DEMO = (function () {
   var D = U.isoOffset;
   function estadoInicial() {
     return {
-      version: 3,
+      version: 4,
       sesion: { iniciada: false, rol: null, cuentaId: null, nombre: '', apellido: '', alias: '', email: '' },
       usuario: { nombre: 'Maximiliano', apellido: 'Rodríguez', alias: 'Maxi', email: 'maxi.vecino@ejemplo.com', telefono: '3482 555-1234', domicilio: 'Calle 12 N°245', barrio: 'Centro', notificaciones: { vencimientos: true, reclamos: true, tramites: true, turnos: true, comunicados: true } },
       cuentas: [
@@ -93,7 +93,13 @@ window.DEMO = (function () {
           { id: 'mm-9', acta: '2026-00184', fecha: D(-25, 13, 5), motivo: 'Falta de documentación del vehículo', ubicacion: 'Calle 12 N°1120', importe: 5400, estado: 'pagada', ciudadanoId: 'ciu-4', dominio: 'AB 903 TR', descargos: [] },
           { id: 'mm-10', acta: '2026-00176', fecha: D(-29, 10, 50), motivo: 'Circulación de motocicleta sin casco', ubicacion: 'Calle 2 y Calle 13', importe: 12300, estado: 'en_descargo', ciudadanoId: 'ciu-2', dominio: 'CQ 455 LM', descargos: [ { id: 'mmd-1', numero: 'DER-2026-00021', fecha: D(-21, 9, 30), texto: 'El casco se encontraba dentro de la caja de la moto al momento del control (demo).', estado: 'En revisión', historial: [ { estado: 'Presentado', fecha: D(-21, 9, 30), comentario: 'Descargo recibido por Mesa de Entradas (demo).' }, { estado: 'En revisión', fecha: D(-17, 8, 10), comentario: 'El área de Tránsito está evaluando la presentación (demo).' } ] } ] },
           { id: 'mm-11', acta: '2026-00168', fecha: D(-33, 12, 25), motivo: 'Exceso de velocidad', ubicacion: 'Ruta Nacional 11 km 2', importe: 19800, estado: 'pagada', ciudadanoId: 'ciu-8', dominio: 'AA 118 QW', descargos: [] },
-          { id: 'mm-12', acta: '2026-00161', fecha: D(-38, 17, 35), motivo: 'Estacionamiento en lugar prohibido', ubicacion: 'Calle 13 N°1250', importe: 6900, estado: 'en_descargo', ciudadanoId: 'ciu-5', dominio: 'AF 214 PK', descargos: [ { id: 'mmd-2', numero: 'DER-2026-00019', fecha: D(-30, 15, 20), texto: 'El vehículo estaba en el lugar por una avería repentina y colocó balizas (demo).', estado: 'Presentado', historial: [ { estado: 'Presentado', fecha: D(-30, 15, 20), comentario: 'Descargo recibido por Mesa de Entradas (demo).' } ] } ] }
+          { id: 'mm-12', acta: '2026-00161', fecha: D(-38, 17, 35), motivo: 'Estacionamiento en lugar prohibido', ubicacion: 'Calle 13 N°1250', importe: 6900, estado: 'en_descargo', ciudadanoId: 'ciu-5', dominio: 'AF 214 PK', descargos: [ { id: 'mmd-2', numero: 'DER-2026-00019', fecha: D(-30, 15, 20), texto: 'El vehículo estaba en el lugar por una avería repentina y colocó balizas (demo).', estado: 'Presentado', historial: [ { estado: 'Presentado', fecha: D(-30, 15, 20), comentario: 'Descargo recibido por Mesa de Entradas (demo).' } ] } ] },
+          { id: 'mm-13', acta: '2026-00242', fecha: D(-1, 11, 10), motivo: 'Estacionamiento obstruyendo rampa de acceso o senda peatonal', ubicacion: 'Calle 6 N°512', importe: 35000, estado: 'pendiente', ciudadanoId: 'ciu-3', dominio: 'AC 512 NB', descargos: [] }
+        ],
+        extracciones: [
+          { id: 'ext-1', numero: 'EXT-2026-000041', fecha: D(-3, 9, 55), dominio: 'AB 903 TR', tipoVehiculo: 'Automóvil', motivoId: 'lugar_prohibido', motivo: 'Estacionamiento en lugar prohibido', ubicacion: 'Calle 12 N°300', inspector: 'Equipo de control (demo)', observaciones: 'Vehículo retirado con grúa municipal (demo).', estado: 'Entregado', multaId: 'mm-2' },
+          { id: 'ext-2', numero: 'EXT-2026-000042', fecha: D(-10, 14, 5), dominio: 'AA 118 QW', tipoVehiculo: 'Automóvil', motivoId: 'vereda', motivo: 'Estacionamiento sobre vereda', ubicacion: 'Calle 7 N°510', inspector: 'Equipo de control (demo)', observaciones: '', estado: 'Entregado', multaId: 'mm-5' },
+          { id: 'ext-3', numero: 'EXT-2026-000043', fecha: D(-1, 11, 10), dominio: 'AC 512 NB', tipoVehiculo: 'Automóvil', motivoId: 'rampa', motivo: 'Obstrucción de rampa o senda peatonal', ubicacion: 'Calle 6 N°512', inspector: 'Equipo de control (demo)', observaciones: 'Retiro inmediato por seguridad (demo).', estado: 'En depósito', multaId: 'mm-13' }
         ],
         obligaciones: [
           { id: 'mo-1', categoria: 'tgi', concepto: 'Tasa General de Inmuebles', identificador: 'Partida 123-45.890', periodo: '2026 · 2ª cuota', vencimiento: D(5, 23, 59), importe: 24500, intereses: 0, estado: 'pendiente', ciudadanoId: 'ciu-1' },
@@ -158,6 +164,17 @@ window.DEMO = (function () {
       activo: { texto: 'Activo', clase: 'b-exito', icono: 'user-check' },
       bloqueado: { texto: 'Bloqueado', clase: 'b-peligro', icono: 'user-x' }
     },
+    extraccionMotivos: [
+      { id: 'rampa', nombre: 'Obstrucción de rampa o senda peatonal', motivoMulta: 'Estacionamiento obstruyendo rampa de acceso o senda peatonal', importe: 35000 },
+      { id: 'doble_fila', nombre: 'Doble fila', motivoMulta: 'Estacionamiento en doble fila', importe: 18000 },
+      { id: 'lugar_prohibido', nombre: 'Estacionamiento en lugar prohibido', motivoMulta: 'Estacionamiento en lugar prohibido', importe: 12000 },
+      { id: 'vereda', nombre: 'Estacionamiento sobre vereda', motivoMulta: 'Estacionamiento sobre vereda', importe: 9800 },
+      { id: 'abandono', nombre: 'Vehículo en aparente abandono', motivoMulta: 'Vehículo abandonado en la vía pública', importe: 15000 },
+      { id: 'riesgo', nombre: 'Riesgo para la circulación', motivoMulta: 'Estacionamiento que genera riesgo para la circulación', importe: 22000 }
+    ],
+    tiposVehiculoExtraccion: ['Automóvil', 'Motocicleta', 'Camioneta', 'Camión', 'Maquinaria agrícola o vial', 'Otro'],
+    extraccionEstados: ['En depósito', 'Entregado'],
+    solicitudEstados: ['Pendiente', 'Programada', 'Finalizada'],
     rolesMunicipio: {
       ciudadano: { texto: 'Ciudadano', clase: 'b-info', icono: 'user' },
       admin: { texto: 'Personal municipal', clase: 'b-neutra', icono: 'shield-check' }

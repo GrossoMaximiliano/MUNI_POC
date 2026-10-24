@@ -55,14 +55,13 @@ Views.login = (function () {
           <button type='button' class='btn btn-primario btn-bloque' id='lg-entrar'>${Icons.r('log-in', 'i-18')} Ingresar</button>
         </div>
         <p class='sub mt-16 centrado'>¿No tenés cuenta? <a class='enlace' href='#/registro'>Crear cuenta (demo)</a></p>
-        <div class='alerta a-info mt-8'>${Icons.r('info')}<span>Cuentas de prueba (demo): vecino <strong>maxi.vecino@ejemplo.com</strong> · personal municipal <strong>gestion@lascoscas.gob.ar</strong> · clave <strong>demo1234</strong>.</span></div>
+        <div class='alerta a-info mt-8'>${Icons.r('info')}<span>Cuenta de prueba (demo): vecino <strong>maxi.vecino@ejemplo.com</strong> · clave <strong>demo1234</strong>.</span></div>
       </div>
       <div class='card mt-8' style='border-style:dashed'>
-        <h3>Accesos rápidos de demostración</h3>
-        <p class='sub'>Entrar directamente con una de las cuentas ficticias para probar cada rol.</p>
+        <h3>Acceso rápido de demostración</h3>
+        <p class='sub'>Entrar directamente con la cuenta ficticia de vecino para probar el portal.</p>
         <div class='fila-acciones'>
           <button type='button' class='btn btn-secundario btn-bloque' id='lg-demo-vecino'>${Icons.r('user', 'i-18')} Entrar como vecino</button>
-          <button type='button' class='btn btn-secundario btn-bloque' id='lg-demo-admin'>${Icons.r('shield-check', 'i-18')} Entrar como personal municipal</button>
         </div>
       </div>
       <div class='alerta a-aviso mt-8'>${Icons.r('alert-triangle')}<span>${U.escape(DEMO.catalogos.emergenciaNota)}</span></div>`;
@@ -98,7 +97,6 @@ Views.login = (function () {
       if (b) b.addEventListener('click', function () { entrar(Servicios.login(email, 'demo1234')); });
     };
     intro('#lg-demo-vecino', 'maxi.vecino@ejemplo.com');
-    intro('#lg-demo-admin', 'gestion@lascoscas.gob.ar');
     raiz.querySelectorAll('#lg-email, #lg-clave').forEach(function (i) {
       i.addEventListener('keydown', function (e) { if (e.key === 'Enter') btn.click(); });
     });
