@@ -370,9 +370,7 @@ window.Servicios = (function () {
   /* —— Panel de administración (mock). Integración REST futura:
      GET /admin/resumen · GET /admin/multas · GET /admin/reclamos ·
      GET /admin/tramites · GET /admin/ciudadanos · PATCH /admin/reclamos/:id ·
-     PATCH /admin/tramites/:id · PATCH /admin/ciudadanos/:id ·
-     GET /admin/extracciones · POST /admin/extracciones · PATCH /admin/extracciones/:id ·
-     GET /admin/solicitudes · PATCH /admin/solicitudes/:id */
+     PATCH /admin/tramites/:id · PATCH /admin/ciudadanos/:id */
   function M() { return S().municipal; }
 
   function nombreCiudadano(id) {
@@ -382,9 +380,6 @@ window.Servicios = (function () {
 
   function resumenMunicipal() {
     var m = M();
-    var st = S();
-    var extracciones = m.extracciones || [];
-    var solicitudes = st.solicitudesServicios || [];
     function contar(arr, estado) { return arr.filter(function (x) { return x.estado === estado; }).length; }
     function sumar(arr) { return arr.reduce(function (a, x) { return a + (x.importe || 0) + (x.intereses || 0); }, 0); }
     var pendientes = m.obligaciones.filter(function (o) { return o.estado === 'pendiente' || o.estado === 'vencida'; });
@@ -394,9 +389,7 @@ window.Servicios = (function () {
       recaudado: sumar(m.obligaciones.filter(function (o) { return o.estado === 'pagada'; })) + sumar(m.multas.filter(function (x) { return x.estado === 'pagada'; })),
       reclamos: { abiertos: m.reclamos.filter(function (r) { return r.estado !== 'Resuelto' && r.estado !== 'No corresponde'; }).length, total: m.reclamos.length },
       tramites: { enCurso: m.tramites.filter(function (t) { return t.estado !== 'Finalizado'; }).length, total: m.tramites.length },
-      ciudadanos: { activos: contar(m.ciudadanos, 'activo'), bloqueados: contar(m.ciudadanos, 'bloqueado'), total: m.ciudadanos.length },
-      extracciones: { enDeposito: contar(extracciones, 'En depósito'), entregadas: contar(extracciones, 'Entregado'), total: extracciones.length },
-      solicitudes: { pendientes: solicitudes.filter(function (s) { return s.estado !== 'Finalizada'; }).length, total: solicitudes.length }
+      ciudadanos: { activos: contar(m.ciudadanos, 'activo'), bloqueados: contar(m.ciudadanos, 'bloqueado'), total: m.ciudadanos.length }
     };
   }
 
@@ -424,95 +417,6 @@ window.Servicios = (function () {
     c.estado = c.estado === 'activo' ? 'bloqueado' : 'activo';
     Store.save();
     return c.estado;
-  }
-
-  function proximoActaMunicipal() {
-    var max = 0;
-    (M().multas || []).forEach(function (x) {
-      var partes = String(x.acta || '').split('-');
-      var n = parseInt(partes[1] || '0', 10);
-      if (!isNaN(n) && n > max) max = n;
-    });
-    return '2026-' + pad(max + 1, 5);
-  }
-
-  function proximoNumeroExtraccion() {
-    var max = 0;
-    ((M().extracciones) || []).forEach(function (x) {
-      var n = parseInt(String(x.numero || '').split('-')[2] || '0', 10);
-      if (!isNaN(n) && n > max) max = n;
-    });
-    return 'EXT-2026-' + pad(max + 1, 6);
-  }
-
-  /* Mock de POST /admin/extracciones: registra el retiro con grúa y genera
-     automáticamente el acta de infracción asociada al motivo (demo). */
-  function registrarExtraccion(datos) {
-    var st = S();
-    var m = st.municipal;
-    if (!m || !Array.isArray(m.extracciones)) return null;
-    var motivo = C().extraccionMotivos.filter(function (x) { return x.id === datos.motivoId; })[0];
-    if (!motivo) return null;
-    var titular = null;
-    (m.multas || []).forEach(function (x) {
-      if (!titular && x.dominio && x.ciudadanoId && String(x.dominio).replace(/\s/g, '').toUpperCase() === String(datos.dominio || '').replace(/\s/g, '').toUpperCase()) titular = x.ciudadanoId;
-    });
-    var fecha = U.hoyISO();
-    var multa = {
-      id: U.uid('mm'),
-      acta: proximoActaMunicipal(),
-      fecha: fecha,
-      motivo: motivo.motivoMulta,
-      ubicacion: datos.ubicacion,
-      importe: motivo.importe,
-      estado: 'pendiente',
-      ciudadanoId: titular,
-      dominio: datos.dominio,
-      descargos: [],
-      origenExtraccion: true
-    };
-    m.multas.unshift(multa);
-    var extraccion = {
-      id: U.uid('ext'),
-      numero: proximoNumeroExtraccion(),
-      fecha: fecha,
-      dominio: datos.dominio,
-      tipoVehiculo: datos.tipoVehiculo,
-      motivoId: motivo.id,
-      motivo: motivo.nombre,
-      ubicacion: datos.ubicacion,
-      inspector: datos.inspector || 'Inspector de tránsito (demo)',
-      observaciones: datos.observaciones || '',
-      estado: 'En depósito',
-      multaId: multa.id
-    };
-    m.extracciones.unshift(extraccion);
-    Store.save();
-    return { extraccion: extraccion, multa: multa };
-  }
-
-  /* Mock de PATCH /admin/extracciones/:id: marca el vehículo como entregado del depósito (demo). */
-  function entregarExtraccion(id) {
-    var m = M();
-    var ext = (m.extracciones || []).filter(function (x) { return x.id === id; })[0];
-    if (!ext || ext.estado !== 'En depósito') return null;
-    ext.estado = 'Entregado';
-    Store.save();
-    return ext.estado;
-  }
-
-  /* Mock de PATCH /admin/solicitudes/:id: avanza el estado de una solicitud de servicio ciudadana (demo). */
-  function avanzarSolicitudMunicipal(id) {
-    var st = S();
-    var sol = (st.solicitudesServicios || []).filter(function (s) { return s.id === id; })[0];
-    if (!sol) return null;
-    var estados = C().solicitudEstados;
-    var idx = estados.indexOf(sol.estado);
-    if (idx < 0 || idx >= estados.length - 1) return null;
-    var nuevo = estados[idx + 1];
-    sol.estado = nuevo;
-    Store.save();
-    return nuevo;
   }
 
   function marcarLeida(id) {
@@ -556,9 +460,6 @@ window.Servicios = (function () {
     avanzarReclamoMunicipal: avanzarReclamoMunicipal,
     avanzarTramiteMunicipal: avanzarTramiteMunicipal,
     cambiarEstadoCiudadano: cambiarEstadoCiudadano,
-    registrarExtraccion: registrarExtraccion,
-    entregarExtraccion: entregarExtraccion,
-    avanzarSolicitudMunicipal: avanzarSolicitudMunicipal,
     marcarLeida: marcarLeida,
     marcarTodasLeidas: marcarTodasLeidas,
     sinLeer: sinLeer

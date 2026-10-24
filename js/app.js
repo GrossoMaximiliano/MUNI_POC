@@ -154,7 +154,6 @@
       items = [
         { clave: 'admin', href: '#/admin', icono: 'dashboard', texto: 'Panel' },
         { clave: 'multas', href: '#/admin/multas', icono: 'alert-triangle', texto: 'Multas' },
-        { clave: 'extracciones', href: '#/admin/extracciones', icono: 'truck', texto: 'Grúas' },
         { clave: 'reclamos', href: '#/admin/reclamos', icono: 'megaphone', texto: 'Reclamos' },
         { clave: 'tramites', href: '#/admin/tramites', icono: 'clipboard', texto: 'Trámites' },
         { clave: 'ciudadanos', href: '#/admin/ciudadanos', icono: 'users', texto: 'Ciudadanos' }
@@ -162,9 +161,7 @@
       laterales = [
         { clave: 'admin', href: '#/admin', icono: 'dashboard', texto: 'Panel municipal' },
         { clave: 'multas', href: '#/admin/multas', icono: 'alert-triangle', texto: 'Multas e infracciones' },
-        { clave: 'extracciones', href: '#/admin/extracciones', icono: 'truck', texto: 'Extracciones de vehículos' },
         { clave: 'reclamos', href: '#/admin/reclamos', icono: 'megaphone', texto: 'Reclamos' },
-        { clave: 'solicitudes', href: '#/admin/solicitudes', icono: 'wrench', texto: 'Solicitudes de servicios' },
         { clave: 'tramites', href: '#/admin/tramites', icono: 'clipboard', texto: 'Trámites' },
         { clave: 'ciudadanos', href: '#/admin/ciudadanos', icono: 'users', texto: 'Ciudadanos' },
         { sep: true },
@@ -242,11 +239,6 @@
     add('admin/tramite/:id', function (p) { return Views.adminTramites.detalle(p.id); });
     add('admin/ciudadanos', function () { return Views.adminCiudadanos.main(); });
     add('admin/ciudadano/:id', function (p) { return Views.adminCiudadanos.detalle(p.id); });
-    add('admin/extracciones', function () { return Views.adminExtracciones.main(); });
-    add('admin/extracciones/nueva', function () { return Views.adminExtracciones.nueva(); });
-    add('admin/extraccion/:id', function (p) { return Views.adminExtracciones.detalle(p.id); });
-    add('admin/solicitudes', function () { return Views.adminSolicitudes.main(); });
-    add('admin/solicitud/:id', function (p) { return Views.adminSolicitudes.detalle(p.id); });
   }
 
   function boot() {
