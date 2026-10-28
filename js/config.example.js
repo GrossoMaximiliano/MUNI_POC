@@ -1,4 +1,4 @@
-/* Copiar como js/config.local.js (ignorado por git) y completar la clave.
+/* Plantilla de js/config.local.js (clave de OpenRouter y modelos).
    Ojo: en un sitio estático la clave queda visible para quien abra la página. */
 window.CONFIG = {
   openrouterKey: '',
