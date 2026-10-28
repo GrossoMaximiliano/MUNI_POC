@@ -351,21 +351,17 @@ body{
 .btn-icono{transition:transform .12s ease,background .15s ease}
 .btn-icono:hover{transform:translateY(-1px)}
 
-/* Nav inferior flotante tipo dock */
-.nav-inferior{
-  left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));
-  border-radius:24px;border:1px solid rgba(227,232,239,.95);
-  box-shadow:0 14px 34px rgba(16,24,40,.20);padding:5px;
-}
-.nav-inferior a{border-radius:18px;min-height:54px;transition:background .15s ease,color .15s ease,transform .12s ease}
+/* Nav inferior fija al borde de la pantalla */
+.nav-inferior{box-shadow:0 -6px 18px rgba(16,24,40,.08)}
+.nav-inferior a{position:relative;transition:color .15s ease,transform .12s ease}
 .nav-inferior a:active{transform:scale(.96)}
-.nav-inferior a.activa{
-  background:linear-gradient(180deg,#1D7DC4,var(--c-primario) 70%,var(--c-primario-hover));
-  color:#fff;box-shadow:0 8px 18px rgba(23,105,170,.38);
+.nav-inferior a.activa::before{
+  content:'';position:absolute;top:0;left:22%;right:22%;height:3px;
+  border-radius:0 0 3px 3px;background:var(--c-primario);
 }
-.vista{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
-.pie{padding-bottom:calc(106px + env(safe-area-inset-bottom))}
-#toast-raiz{bottom:calc(86px + env(safe-area-inset-bottom))}
+.vista{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+.pie{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+#toast-raiz{bottom:calc(72px + env(safe-area-inset-bottom))}
 @media (min-width:1024px){
   .nav-inferior{display:none}
   .vista{padding-bottom:40px}

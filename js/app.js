@@ -173,8 +173,7 @@
         { clave: 'pagos', href: '#/pagos', icono: 'wallet', texto: 'Pagos' },
         { clave: 'reclamos', href: '#/reclamos', icono: 'megaphone', texto: 'Reclamos' },
         { clave: 'servicios', href: '#/servicios', icono: 'wrench', texto: 'Servicios' },
-        { clave: 'tramites', href: '#/tramites', icono: 'clipboard', texto: 'Trámites' },
-        { clave: 'perfil', href: '#/perfil', icono: 'user', texto: 'Perfil' }
+        { clave: 'tramites', href: '#/tramites', icono: 'clipboard', texto: 'Trámites' }
       ];
       laterales = [
         { clave: 'inicio', href: '#/inicio', icono: 'home', texto: 'Inicio' },
