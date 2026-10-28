@@ -1,9 +1,6 @@
-/* Plantilla de js/config.local.js (clave de OpenRouter y modelos).
-   Ojo: en un sitio estático la clave queda visible para quien abra la página. */
+/* Plantilla de js/config.local.js.
+   apiBase: dirección del proxy de IA (BRLDiscord, rutas /ia/chat, /ia/speech, /ia/transcribe).
+   La clave de OpenRouter vive en el servidor, nunca en el front. Para GitHub Pages tiene que ser HTTPS. */
 window.CONFIG = {
-  openrouterKey: '',
-  chatModelo: '~z-ai/glm-flash-latest',
-  sttModelo: 'mistralai/voxtral-small-transcribe-3-0',
-  ttsModelo: 'google/gemini-3.1-flash-tts-preview',
-  ttsVoz: 'Zephyr'
+  apiBase: 'https://tu-servidor.ejemplo'
 };

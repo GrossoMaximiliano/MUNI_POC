@@ -17,9 +17,9 @@ window.Chat = (function () {
     });
   }
 
-  /* ---------- Audio (texto a voz con OpenRouter) ---------- */
+  /* ---------- Audio (texto a voz vía el proxy de IA) ---------- */
   var cfg = window.CONFIG || {};
-  var hayAudio = !!cfg.openrouterKey;
+  var hayAudio = !!cfg.apiBase;
   var reproductor = new Audio();
   var sonando = null; // mensaje que se está reproduciendo
 
@@ -35,15 +35,10 @@ window.Chat = (function () {
   }
 
   function sintetizar(texto) {
-    return fetch('https://openrouter.ai/api/v1/audio/speech', {
+    return fetch(cfg.apiBase + '/ia/speech', {
       method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + cfg.openrouterKey,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': location.origin,
-        'X-Title': 'Las Toscas Portal ciudadano'
-      },
-      body: JSON.stringify({ model: cfg.ttsModelo || 'google/gemini-3.1-flash-tts-preview', input: texto, voice: cfg.ttsVoz || 'Zephyr', response_format: 'pcm' })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input: texto, voice: 'Zephyr' })
     }).then(function (r) {
       if (!r.ok) throw new Error('TTS ' + r.status);
       var tipo = r.headers.get('Content-Type') || '';
@@ -87,7 +82,7 @@ window.Chat = (function () {
     return `<button type='button' class='chat-audio${est ? ' chat-audio--' + est : ''}' data-audio='${i}' aria-label='${etiqueta}' title='${etiqueta}'>${icono}</button>`;
   }
 
-  /* ---------- Mensajes de voz (grabación + transcripción con OpenRouter) ---------- */
+  /* ---------- Mensajes de voz (grabación + transcripción vía el proxy de IA) ---------- */
   var puedeGrabar = hayAudio && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
   var MAX_SEG_AUDIO = 60;
   var grabacion = null; // { rec, stream, partes, inicio, reloj, cancelada }
@@ -124,15 +119,10 @@ window.Chat = (function () {
 
   function transcribir(blob) {
     return aWav(blob).then(aBase64).then(function (b64) {
-      return fetch('https://openrouter.ai/api/v1/audio/transcriptions', {
+      return fetch(cfg.apiBase + '/ia/transcribe', {
         method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + cfg.openrouterKey,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': location.origin,
-          'X-Title': 'Las Toscas Portal ciudadano'
-        },
-        body: JSON.stringify({ model: cfg.sttModelo || 'mistralai/voxtral-small-transcribe-3-0', input_audio: { data: b64, format: 'wav' } })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: b64, format: 'wav' })
       });
     }).then(function (r) {
       if (!r.ok) throw new Error('STT ' + r.status);

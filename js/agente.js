@@ -1,10 +1,10 @@
-/* agente.js — Conecta el chat con un modelo de OpenRouter (chat completions).
-   Arma el prompt de sistema con docs/prompt-sistema-asistente.md, la base de conocimiento
-   (docs/base-conocimiento-asistente.md) y el estado actual de la cuenta. El hilo vive solo
-   en memoria (Chat lo descarta al cambiar de cuenta o recargar). Demo: la clave queda en el front. */
+/* agente.js — Conecta el chat con el modelo de IA a través del proxy (CONFIG.apiBase + /ia/chat),
+   que guarda la clave de OpenRouter y fija el modelo. Arma el prompt de sistema con
+   docs/prompt-sistema-asistente.md, la base de conocimiento (docs/base-conocimiento-asistente.md)
+   y el estado actual de la cuenta. El hilo vive solo en memoria (Chat lo descarta al cambiar de cuenta o recargar). */
 (function () {
   var cfg = window.CONFIG || {};
-  if (!cfg.openrouterKey || !window.Chat) return;
+  if (!cfg.apiBase || !window.Chat) return;
 
   var MAX_MENSAJES = 20; // últimos mensajes del hilo que se envían al modelo
   var TIMEOUT_MS = 60000;
@@ -97,16 +97,11 @@
       }));
       var ctrl = new AbortController();
       var corte = setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS);
-      return fetch('https://openrouter.ai/api/v1/chat/completions', {
+      return fetch(cfg.apiBase + '/ia/chat', {
         method: 'POST',
         signal: ctrl.signal,
-        headers: {
-          'Authorization': 'Bearer ' + cfg.openrouterKey,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': location.origin,
-          'X-Title': 'Las Toscas Portal ciudadano'
-        },
-        body: JSON.stringify({ model: cfg.chatModelo || '~z-ai/glm-flash-latest', messages: mensajes, reasoning: { enabled: true } })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: mensajes })
       }).then(function (r) {
         clearTimeout(corte);
         if (!r.ok) throw new Error('chat ' + r.status);
